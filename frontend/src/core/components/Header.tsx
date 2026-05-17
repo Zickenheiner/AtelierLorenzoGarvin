@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Plus, X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { cn } from '@/core/utils/cn';
+import routes from '@/core/constants/routes';
 
 const NAV_LINKS = [
-  { label: 'Accueil', href: '/', active: true },
+  { label: 'Accueil', href: routes.home },
   { label: 'Projets', href: '#projets' },
   { label: 'Prestations', href: '#prestations' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Contact', href: routes.contact },
 ];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
+  const isActive = (href: string) => href.startsWith('/') && href === pathname;
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -50,7 +54,7 @@ export default function Header() {
                     href={link.href}
                     className={cn(
                       'text-[16px] leading-6 tracking-[-0.025em] transition-colors hover:text-[var(--lga-ink)]',
-                      link.active
+                      isActive(link.href)
                         ? 'font-bold text-[#000000]'
                         : 'font-normal text-[var(--lga-subtle)]',
                     )}
@@ -126,7 +130,7 @@ export default function Header() {
               onClick={() => setIsOpen(false)}
               className={cn(
                 'rounded-lg px-4 py-3 text-[18px] leading-6 tracking-[-0.025em] transition-colors',
-                link.active
+                isActive(link.href)
                   ? 'bg-black/[0.04] font-bold text-[#000000]'
                   : 'font-normal text-[var(--lga-subtle)] hover:bg-black/[0.03] hover:text-[var(--lga-ink)]',
               )}
