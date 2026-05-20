@@ -1,7 +1,10 @@
 const routes = {
   home: '/',
+  prestations: '/prestations',
   contact: '/contact',
-  login: '/login',
+  projet: '/projet/:slug',
+  adminLogin: '/admin/login',
+  admin: '/admin',
 };
 
 export default routes;

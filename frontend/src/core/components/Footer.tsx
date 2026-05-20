@@ -23,7 +23,7 @@ export default function Footer() {
           </a>
         </div>
         <p
-          className="text-center text-[10px] leading-[16.5px] tracking-[0.1em] text-[var(--lga-footer-ink)] uppercase"
+          className="text-center text-[10px] leading-[16.5px] tracking-[0.1em] text-[var(--lga-footer-ink)]"
           style={{ fontFamily: 'var(--font-body)', fontWeight: 400 }}
         >
           ©2026 lorenzo garvin architecte. All rights reserved.

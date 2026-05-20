@@ -7,7 +7,7 @@ import routes from '@/core/constants/routes';
 const NAV_LINKS = [
   { label: 'Accueil', href: routes.home },
   { label: 'Projets', href: '#projets' },
-  { label: 'Prestations', href: '#prestations' },
+  { label: 'Prestations', href: routes.prestations },
   { label: 'Contact', href: routes.contact },
 ];
 

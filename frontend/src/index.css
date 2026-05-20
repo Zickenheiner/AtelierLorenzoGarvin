@@ -123,12 +123,20 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-lga-bg text-foreground;
     font-family: var(--font-body);
+    line-height: 1.75;
     cursor:
       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='6' fill='%23323232' stroke='white' stroke-width='1'/></svg>")
         14 14,
       auto;
+  }
+
+  p,
+  li,
+  dd,
+  dt {
+    line-height: 1.85;
   }
 
   a,

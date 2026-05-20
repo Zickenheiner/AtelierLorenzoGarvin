@@ -72,14 +72,18 @@ const request = async <T = unknown>(config: Config): Promise<T> => {
 
   const response = await fetch(buildUrl(config.url, config.query), init);
 
-  if (response.status === 401 && !isRefreshing) {
+  const isAuthEndpoint =
+    config.url === endpoints.auth.login ||
+    config.url === endpoints.auth.refresh;
+
+  if (response.status === 401 && !isRefreshing && !isAuthEndpoint) {
     isRefreshing = true;
     const newToken = await tryRefresh();
     isRefreshing = false;
 
     if (!newToken) {
       clearTokens();
-      window.location.href = '/login';
+      window.location.href = '/admin/login';
       throw new ApiError('Session expirée', 401);
     }
 

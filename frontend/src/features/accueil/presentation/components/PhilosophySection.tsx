@@ -35,7 +35,7 @@ export default function PhilosophySection() {
               {block.eyebrow}
             </h3>
             <div
-              className="text-justify text-[20px] leading-[22px] whitespace-pre-line text-[var(--lga-ink)]"
+              className="text-justify text-[20px] leading-[1.85] whitespace-pre-line text-[var(--lga-ink)]"
               style={{ fontFamily: 'var(--font-display)', fontWeight: 400 }}
             >
               {block.body}
