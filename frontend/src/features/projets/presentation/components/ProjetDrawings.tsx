@@ -5,6 +5,8 @@ interface Props {
 }
 
 export default function ProjetDrawings({ projet }: Props) {
+  if (projet.drawings.length === 0) return null;
+
   return (
     <section className="w-full bg-[var(--lga-bg)] px-6 py-16 sm:px-8 sm:py-20 lg:py-24">
       <div className="mx-auto flex max-w-[1216px] flex-col gap-10">
@@ -16,13 +18,13 @@ export default function ProjetDrawings({ projet }: Props) {
         </h2>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-2">
-          {projet.drawings.map((d) => (
+          {projet.drawings.map((d, idx) => (
             <figure
-              key={d.caption}
+              key={`${d.img}-${idx}`}
               className="flex flex-col gap-3 bg-[var(--lga-surface)] p-6 sm:p-10"
             >
               <img
-                src={d.src}
+                src={d.img}
                 alt={d.alt}
                 className="h-auto w-full object-contain lg:aspect-[602/590]"
               />
@@ -30,7 +32,7 @@ export default function ProjetDrawings({ projet }: Props) {
                 className="text-[11px] tracking-[0.2em] text-[var(--lga-muted)] uppercase"
                 style={{ fontFamily: 'var(--font-body)', fontWeight: 500 }}
               >
-                {d.caption}
+                {d.alt}
               </figcaption>
             </figure>
           ))}

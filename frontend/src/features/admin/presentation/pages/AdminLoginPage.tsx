@@ -18,7 +18,7 @@ type FormValues = z.infer<typeof schema>;
 const INPUT_BASE =
   'w-full border-0 border-b border-[#c6c6c6] bg-transparent py-3 text-[16px] tracking-[0.05em] text-[var(--lga-ink)] placeholder:text-[var(--lga-muted)] focus:border-[var(--lga-ink)] focus:outline-none transition-colors';
 
-export default function LoginPage() {
+export default function AdminLoginPage() {
   const navigate = useNavigate();
   const login = useLogin();
 

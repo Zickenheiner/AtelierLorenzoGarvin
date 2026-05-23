@@ -3,7 +3,7 @@ import {
   getAccessToken,
   getRefreshToken,
 } from '@/core/local/storage';
-import { useMe } from '@/features/auth/domain/hooks/auth.hook';
+import { useMe } from '@/features/admin/domain/hooks/auth.hook';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 interface Props {

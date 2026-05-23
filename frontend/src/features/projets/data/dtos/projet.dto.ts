@@ -3,37 +3,41 @@ export interface ProjetSpecDto {
   value: string;
 }
 
-export interface ProjetImageDto {
-  url: string;
-  alt: string;
-  caption?: string;
-}
-
 export interface ProjetDrawingDto {
-  url: string;
+  img: string;
   alt: string;
-  caption: string;
 }
 
-export interface ProjetNavigationDto {
-  slug: string;
-  label: string;
-  title: string;
+export interface ProjetGalleryItemDto {
+  img: string;
+  alt: string;
+}
+
+export interface ProjetHeroDto {
+  img: string;
+  alt: string;
 }
 
 export interface ProjetResponseDto {
+  id: string;
   slug: string;
   title: string;
-  category: string;
-  heroImage: ProjetImageDto;
-  narrative: string[];
-  specs: ProjetSpecDto[];
+  narrative: string;
+  resume: string;
+  hero: ProjetHeroDto;
+  spec: ProjetSpecDto[];
   drawings: ProjetDrawingDto[];
-  gallery: {
-    feature: ProjetImageDto;
-    tall: ProjetImageDto;
-    small: ProjetImageDto[];
-  };
-  previous?: ProjetNavigationDto;
-  next?: ProjetNavigationDto;
+  gallery: ProjetGalleryItemDto[];
 }
+
+export interface ProjetCreateRequestDto {
+  title: string;
+  narrative: string;
+  resume: string;
+  hero: ProjetHeroDto;
+  spec: ProjetSpecDto[];
+  drawings?: ProjetDrawingDto[];
+  gallery?: ProjetGalleryItemDto[];
+}
+
+export type ProjetUpdateRequestDto = Partial<ProjetCreateRequestDto>;

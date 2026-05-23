@@ -5,6 +5,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from '@core/guards/access-token.guard';
 import { AtStrategy } from '@core/strategies/at.strategy';
 import { AuthModule } from '@features/auth/auth.module';
+import { ProjectsModule } from '@features/projects/projects.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuthModule } from '@features/auth/auth.module';
       inject: [ConfigService],
     }),
     AuthModule,
+    ProjectsModule,
   ],
   providers: [
     AtStrategy,

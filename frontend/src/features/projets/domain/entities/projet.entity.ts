@@ -3,37 +3,29 @@ export interface ProjetSpec {
   value: string;
 }
 
-export interface ProjetImage {
-  src: string;
-  alt: string;
-  caption?: string;
-}
-
 export interface ProjetDrawing {
-  src: string;
+  img: string;
   alt: string;
-  caption: string;
 }
 
-export interface ProjetNavigationLink {
-  slug: string;
-  label: string;
-  title: string;
+export interface ProjetGalleryItem {
+  img: string;
+  alt: string;
+}
+
+export interface ProjetHero {
+  img: string;
+  alt: string;
 }
 
 export interface ProjetEntity {
+  id: string;
   slug: string;
   title: string;
-  category: string;
-  heroImage: ProjetImage;
-  narrative: string[];
-  specs: ProjetSpec[];
+  narrative: string;
+  resume: string;
+  hero: ProjetHero;
+  spec: ProjetSpec[];
   drawings: ProjetDrawing[];
-  gallery: {
-    feature: ProjetImage;
-    tall: ProjetImage;
-    small: ProjetImage[];
-  };
-  previous?: ProjetNavigationLink;
-  next?: ProjetNavigationLink;
+  gallery: ProjetGalleryItem[];
 }

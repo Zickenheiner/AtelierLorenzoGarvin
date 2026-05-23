@@ -5,6 +5,11 @@ const endpoints = {
     logout: '/auth/logout',
     me: '/auth/me',
   },
+  projects: {
+    list: '/projects',
+    bySlug: (slug: string) => `/projects/slug/${slug}`,
+    byId: (id: string) => `/projects/${id}`,
+  },
 };
 
 export default endpoints;
