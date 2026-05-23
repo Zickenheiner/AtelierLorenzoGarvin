@@ -22,7 +22,7 @@ export default function Router() {
           <Route path={routes.prestations} element={<PrestationsPage />} />
           <Route path={routes.contact} element={<ContactPage />} />
           <Route path={routes.projetsList} element={<ProjetsListPage />} />
-          <Route path={routes.projet} element={<ProjetPage />} />
+          <Route path={routes.projets(':slug')} element={<ProjetPage />} />
         </Route>
 
         {/* Login admin — pas de Layout, page autonome */}
@@ -36,7 +36,7 @@ export default function Router() {
             element={<AdminProjetCreatePage />}
           />
           <Route
-            path={routes.adminProjetEdit}
+            path={routes.adminProjetEdit(':id')}
             element={<AdminProjetEditPage />}
           />
         </Route>

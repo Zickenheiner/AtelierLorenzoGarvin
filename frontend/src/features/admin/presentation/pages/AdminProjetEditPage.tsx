@@ -174,12 +174,7 @@ export default function AdminProjetEditPage() {
               Informations générales
             </h2>
 
-            <Field
-              label="Titre"
-              htmlFor="title"
-              error={errors.title?.message}
-              hint="Si tu modifies le titre, le slug (URL) sera régénéré automatiquement."
-            >
+            <Field label="Titre" htmlFor="title" error={errors.title?.message}>
               <input
                 id="title"
                 type="text"

@@ -131,12 +131,7 @@ export default function AdminProjetCreatePage() {
               Informations générales
             </h2>
 
-            <Field
-              label="Titre"
-              htmlFor="title"
-              error={errors.title?.message}
-              hint="Le slug (URL) sera généré automatiquement à partir du titre."
-            >
+            <Field label="Titre" htmlFor="title" error={errors.title?.message}>
               <input
                 id="title"
                 type="text"

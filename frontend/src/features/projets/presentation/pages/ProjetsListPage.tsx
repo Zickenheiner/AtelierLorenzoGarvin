@@ -1,3 +1,4 @@
+import routes from '@/core/constants/routes';
 import { toAssetUrl } from '@/core/utils/asset-url';
 import { Link } from 'react-router-dom';
 import { useProjets } from '../../domain/hooks/projet.hook';
@@ -47,7 +48,7 @@ export default function ProjetsListPage() {
             {projets.map((projet) => (
               <Link
                 key={projet.id}
-                to={`/projets/${projet.slug}`}
+                to={routes.projets(projet.slug)}
                 className="group relative block aspect-[4/5] overflow-hidden bg-[var(--lga-surface)]"
               >
                 <img

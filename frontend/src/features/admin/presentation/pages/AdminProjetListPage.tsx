@@ -153,7 +153,7 @@ export default function AdminProjetListPage() {
 
                   <div className="mt-auto flex items-center gap-2 border-t border-[var(--lga-footer)] pt-4">
                     <Link
-                      to={`/projets/${projet.slug}`}
+                      to={routes.projets(projet.slug)}
                       target="_blank"
                       rel="noopener noreferrer"
                       title="Voir la page publique"
@@ -167,7 +167,7 @@ export default function AdminProjetListPage() {
                       Voir
                     </Link>
                     <Link
-                      to={routes.adminProjetEdit.replace(':id', projet.id)}
+                      to={routes.adminProjetEdit(projet.id)}
                       title="Modifier"
                       className="inline-flex h-[36px] flex-1 items-center justify-center gap-1.5 border border-[var(--lga-ink)] bg-[var(--lga-ink)] text-[10px] tracking-[0.2em] text-white uppercase transition-opacity hover:opacity-85"
                       style={{
