@@ -1,15 +1,23 @@
+import { Button } from '@/core/components/ui/button';
+import { Card } from '@/core/components/ui/card';
+import { ErrorAlert } from '@/core/components/ui/error-alert';
+import { Field } from '@/core/components/ui/field';
+import { Heading } from '@/core/components/ui/heading';
+import { Input } from '@/core/components/ui/input';
+import { LoadingState } from '@/core/components/ui/loading-state';
+import { SectionTitle } from '@/core/components/ui/section-title';
+import { Textarea } from '@/core/components/ui/textarea';
 import routes from '@/core/constants/routes';
-import { cn } from '@/core/utils/cn';
+import {
+  useProjetById,
+  useUpdateProjet,
+} from '@/features/projets/domain/hooks/projet.hook';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
-import {
-  useProjetById,
-  useUpdateProjet,
-} from '@/features/projets/domain/hooks/projet.hook';
 import ImageUploadField from '../components/ImageUploadField';
 
 const imageSchema = z.object({
@@ -35,22 +43,6 @@ const schema = z.object({
 });
 
 type FormValues = z.infer<typeof schema>;
-
-const INPUT_BASE =
-  'w-full border-0 border-b border-[#c6c6c6] bg-transparent py-3 text-[15px] tracking-[0.02em] text-[var(--lga-ink)] placeholder:text-[var(--lga-muted)] focus:border-[var(--lga-ink)] focus:outline-none transition-colors';
-
-const TEXTAREA_BASE =
-  'w-full border border-[#c6c6c6] bg-transparent p-3 text-[15px] leading-[1.6] text-[var(--lga-ink)] placeholder:text-[var(--lga-muted)] focus:border-[var(--lga-ink)] focus:outline-none transition-colors';
-
-const LABEL_BASE =
-  'mb-1 text-[11px] tracking-[0.2em] text-[var(--lga-muted)] uppercase';
-
-const LABEL_STYLE = { fontFamily: 'var(--font-body)', fontWeight: 600 };
-
-const SECTION_TITLE =
-  'text-[14px] tracking-[0.2em] text-[var(--lga-ink)] uppercase';
-
-const SECTION_TITLE_STYLE = { fontFamily: 'var(--font-body)', fontWeight: 700 };
 
 export default function AdminProjetEditPage() {
   const { id } = useParams<{ id: string }>();
@@ -116,8 +108,8 @@ export default function AdminProjetEditPage() {
 
   if (isLoading) {
     return (
-      <main className="flex min-h-[100dvh] items-center justify-center bg-[var(--lga-surface)] text-[var(--lga-muted)]">
-        Chargement…
+      <main className="min-h-[100dvh] bg-[var(--lga-surface)]">
+        <LoadingState className="min-h-[100dvh]" />
       </main>
     );
   }
@@ -144,12 +136,9 @@ export default function AdminProjetEditPage() {
       <div className="mx-auto w-full max-w-[860px]">
         <header className="mb-10 flex items-end justify-between gap-4">
           <div>
-            <h1
-              className="text-[28px] leading-[36px] tracking-[-0.02em] text-[var(--lga-ink)]"
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
-            >
+            <Heading as="h1" level="h1">
               Modifier le projet
-            </h1>
+            </Heading>
             <p className="mt-1 font-mono text-[12px] tracking-[0.05em] text-[var(--lga-muted)]">
               /{projet.slug}
             </p>
@@ -163,315 +152,252 @@ export default function AdminProjetEditPage() {
           </Link>
         </header>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          noValidate
-          className="flex flex-col gap-10 rounded-sm bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
-        >
-          {/* INFOS GÉNÉRALES */}
-          <section className="flex flex-col gap-6">
-            <h2 className={SECTION_TITLE} style={SECTION_TITLE_STYLE}>
-              Informations générales
-            </h2>
+        <Card padding="lg">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            className="flex flex-col gap-10"
+          >
+            <section className="flex flex-col gap-6">
+              <SectionTitle>Informations générales</SectionTitle>
 
-            <Field label="Titre" htmlFor="title" error={errors.title?.message}>
-              <input
-                id="title"
-                type="text"
-                aria-invalid={errors.title ? 'true' : 'false'}
-                {...register('title')}
-                className={cn(
-                  INPUT_BASE,
-                  errors.title && 'border-red-400 focus:border-red-500',
-                )}
-                style={{ fontFamily: 'var(--font-body)' }}
-              />
-            </Field>
+              <Field
+                label="Titre"
+                htmlFor="title"
+                error={errors.title?.message}
+                hint="Si tu modifies le titre, le slug (URL) sera régénéré automatiquement."
+              >
+                <Input
+                  id="title"
+                  aria-invalid={errors.title ? 'true' : 'false'}
+                  {...register('title')}
+                />
+              </Field>
 
-            <Field
-              label="Résumé"
-              htmlFor="resume"
-              error={errors.resume?.message}
-            >
-              <textarea
-                id="resume"
-                rows={2}
-                aria-invalid={errors.resume ? 'true' : 'false'}
-                {...register('resume')}
-                className={cn(
-                  TEXTAREA_BASE,
-                  errors.resume && 'border-red-400 focus:border-red-500',
-                )}
-                style={{ fontFamily: 'var(--font-body)' }}
-              />
-            </Field>
+              <Field
+                label="Résumé"
+                htmlFor="resume"
+                error={errors.resume?.message}
+              >
+                <Textarea
+                  id="resume"
+                  rows={2}
+                  aria-invalid={errors.resume ? 'true' : 'false'}
+                  {...register('resume')}
+                />
+              </Field>
 
-            <Field
-              label="Narration"
-              htmlFor="narrative"
-              error={errors.narrative?.message}
-              hint="Sépare les paragraphes par une ligne vide."
-            >
-              <textarea
-                id="narrative"
-                rows={8}
-                aria-invalid={errors.narrative ? 'true' : 'false'}
-                {...register('narrative')}
-                className={cn(
-                  TEXTAREA_BASE,
-                  errors.narrative && 'border-red-400 focus:border-red-500',
-                )}
-                style={{ fontFamily: 'var(--font-body)' }}
-              />
-            </Field>
-          </section>
+              <Field
+                label="Narration"
+                htmlFor="narrative"
+                error={errors.narrative?.message}
+                hint="Sépare les paragraphes par une ligne vide."
+              >
+                <Textarea
+                  id="narrative"
+                  rows={8}
+                  aria-invalid={errors.narrative ? 'true' : 'false'}
+                  {...register('narrative')}
+                />
+              </Field>
+            </section>
 
-          {/* HERO */}
-          <section className="flex flex-col gap-6">
-            <h2 className={SECTION_TITLE} style={SECTION_TITLE_STYLE}>
-              Image hero
-            </h2>
+            <section className="flex flex-col gap-6">
+              <SectionTitle>Image hero</SectionTitle>
 
-            <Field
-              label="Image"
-              htmlFor="hero.img"
-              error={errors.hero?.img?.message}
-            >
-              <Controller
+              <Field
+                label="Image"
+                htmlFor="hero.img"
+                error={errors.hero?.img?.message}
+              >
+                <Controller
+                  control={control}
+                  name="hero.img"
+                  render={({ field }) => (
+                    <ImageUploadField
+                      value={field.value}
+                      onChange={field.onChange}
+                      invalid={!!errors.hero?.img}
+                    />
+                  )}
+                />
+              </Field>
+
+              <Field
+                label="Texte alternatif"
+                htmlFor="hero.alt"
+                error={errors.hero?.alt?.message}
+              >
+                <Input
+                  id="hero.alt"
+                  aria-invalid={errors.hero?.alt ? 'true' : 'false'}
+                  {...register('hero.alt')}
+                />
+              </Field>
+            </section>
+
+            <section className="flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <SectionTitle>Spécifications</SectionTitle>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="xs"
+                  onClick={() => specArray.append({ label: '', value: '' })}
+                >
+                  <Plus className="h-3 w-3" strokeWidth={2} />
+                  Ajouter une spec
+                </Button>
+              </div>
+
+              {errors.spec?.message ? (
+                <p className="text-[12px] text-red-500">
+                  {errors.spec.message}
+                </p>
+              ) : null}
+
+              <div className="flex flex-col gap-4">
+                {specArray.fields.map((field, idx) => (
+                  <div
+                    key={field.id}
+                    className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_1fr_auto]"
+                  >
+                    <Field
+                      label="Libellé"
+                      htmlFor={`spec.${idx}.label`}
+                      error={errors.spec?.[idx]?.label?.message}
+                    >
+                      <Input
+                        id={`spec.${idx}.label`}
+                        {...register(`spec.${idx}.label` as const)}
+                        aria-invalid={
+                          errors.spec?.[idx]?.label ? 'true' : 'false'
+                        }
+                      />
+                    </Field>
+                    <Field
+                      label="Valeur"
+                      htmlFor={`spec.${idx}.value`}
+                      error={errors.spec?.[idx]?.value?.message}
+                    >
+                      <Input
+                        id={`spec.${idx}.value`}
+                        {...register(`spec.${idx}.value` as const)}
+                        aria-invalid={
+                          errors.spec?.[idx]?.value ? 'true' : 'false'
+                        }
+                      />
+                    </Field>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => specArray.remove(idx)}
+                      disabled={specArray.fields.length === 1}
+                      aria-label="Supprimer"
+                      className="hover:border-red-400 hover:text-red-500"
+                    >
+                      <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <SectionTitle>
+                  Dessins / plans{' '}
+                  <span className="font-normal text-[var(--lga-muted)]">
+                    (optionnel)
+                  </span>
+                </SectionTitle>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="xs"
+                  onClick={() => drawingsArray.append({ img: '', alt: '' })}
+                >
+                  <Plus className="h-3 w-3" strokeWidth={2} />
+                  Ajouter un dessin
+                </Button>
+              </div>
+
+              <ImageArrayFields
+                fields={drawingsArray.fields}
+                onRemove={(idx) => drawingsArray.remove(idx)}
+                name="drawings"
                 control={control}
-                name="hero.img"
-                render={({ field }) => (
-                  <ImageUploadField
-                    value={field.value}
-                    onChange={field.onChange}
-                    invalid={!!errors.hero?.img}
-                  />
-                )}
+                register={register}
+                errors={errors.drawings}
               />
-            </Field>
+            </section>
 
-            <Field
-              label="Texte alternatif"
-              htmlFor="hero.alt"
-              error={errors.hero?.alt?.message}
-            >
-              <input
-                id="hero.alt"
-                type="text"
-                aria-invalid={errors.hero?.alt ? 'true' : 'false'}
-                {...register('hero.alt')}
-                className={cn(
-                  INPUT_BASE,
-                  errors.hero?.alt && 'border-red-400 focus:border-red-500',
-                )}
-                style={{ fontFamily: 'var(--font-body)' }}
+            <section className="flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <SectionTitle>
+                  Galerie{' '}
+                  <span className="font-normal text-[var(--lga-muted)]">
+                    (optionnel)
+                  </span>
+                </SectionTitle>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="xs"
+                  onClick={() => galleryArray.append({ img: '', alt: '' })}
+                >
+                  <Plus className="h-3 w-3" strokeWidth={2} />
+                  Ajouter une image
+                </Button>
+              </div>
+
+              <ImageArrayFields
+                fields={galleryArray.fields}
+                onRemove={(idx) => galleryArray.remove(idx)}
+                name="gallery"
+                control={control}
+                register={register}
+                errors={errors.gallery}
               />
-            </Field>
-          </section>
+            </section>
 
-          {/* SPECS */}
-          <section className="flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              <h2 className={SECTION_TITLE} style={SECTION_TITLE_STYLE}>
-                Spécifications
-              </h2>
-              <AddButton
-                onClick={() => specArray.append({ label: '', value: '' })}
-                label="Ajouter une spec"
-              />
-            </div>
-
-            {errors.spec?.message ? (
-              <p className="text-[12px] text-red-500">{errors.spec.message}</p>
+            {errors.root ? (
+              <ErrorAlert>{errors.root.message}</ErrorAlert>
             ) : null}
 
-            <div className="flex flex-col gap-4">
-              {specArray.fields.map((field, idx) => (
-                <div
-                  key={field.id}
-                  className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_1fr_auto]"
-                >
-                  <Field
-                    label="Libellé"
-                    htmlFor={`spec.${idx}.label`}
-                    error={errors.spec?.[idx]?.label?.message}
-                  >
-                    <input
-                      id={`spec.${idx}.label`}
-                      type="text"
-                      {...register(`spec.${idx}.label` as const)}
-                      className={cn(
-                        INPUT_BASE,
-                        errors.spec?.[idx]?.label &&
-                          'border-red-400 focus:border-red-500',
-                      )}
-                      style={{ fontFamily: 'var(--font-body)' }}
-                    />
-                  </Field>
-                  <Field
-                    label="Valeur"
-                    htmlFor={`spec.${idx}.value`}
-                    error={errors.spec?.[idx]?.value?.message}
-                  >
-                    <input
-                      id={`spec.${idx}.value`}
-                      type="text"
-                      {...register(`spec.${idx}.value` as const)}
-                      className={cn(
-                        INPUT_BASE,
-                        errors.spec?.[idx]?.value &&
-                          'border-red-400 focus:border-red-500',
-                      )}
-                      style={{ fontFamily: 'var(--font-body)' }}
-                    />
-                  </Field>
-                  <RemoveButton
-                    onClick={() => specArray.remove(idx)}
-                    disabled={specArray.fields.length === 1}
-                  />
-                </div>
-              ))}
+            <div className="flex items-center justify-end gap-4">
+              <Link
+                to={routes.admin}
+                className="text-[12px] tracking-[0.2em] text-[var(--lga-muted)] uppercase hover:text-[var(--lga-ink)]"
+                style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
+              >
+                Annuler
+              </Link>
+              <Button
+                type="submit"
+                disabled={isSubmitting || updateProjet.isPending}
+                className="px-8"
+              >
+                {isSubmitting || updateProjet.isPending
+                  ? 'Enregistrement…'
+                  : 'Enregistrer'}
+              </Button>
             </div>
-          </section>
-
-          {/* DRAWINGS */}
-          <section className="flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              <h2 className={SECTION_TITLE} style={SECTION_TITLE_STYLE}>
-                Dessins / plans{' '}
-                <span className="text-[var(--lga-muted)]">(optionnel)</span>
-              </h2>
-              <AddButton
-                onClick={() => drawingsArray.append({ img: '', alt: '' })}
-                label="Ajouter un dessin"
-              />
-            </div>
-
-            <ImageArrayFields
-              fields={drawingsArray.fields}
-              onRemove={(idx) => drawingsArray.remove(idx)}
-              name="drawings"
-              control={control}
-              register={register}
-              errors={errors.drawings}
-            />
-          </section>
-
-          {/* GALLERY */}
-          <section className="flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-              <h2 className={SECTION_TITLE} style={SECTION_TITLE_STYLE}>
-                Galerie{' '}
-                <span className="text-[var(--lga-muted)]">(optionnel)</span>
-              </h2>
-              <AddButton
-                onClick={() => galleryArray.append({ img: '', alt: '' })}
-                label="Ajouter une image"
-              />
-            </div>
-
-            <ImageArrayFields
-              fields={galleryArray.fields}
-              onRemove={(idx) => galleryArray.remove(idx)}
-              name="gallery"
-              control={control}
-              register={register}
-              errors={errors.gallery}
-            />
-          </section>
-
-          {errors.root ? (
-            <div
-              role="alert"
-              className="rounded-sm border border-red-200 bg-red-50 px-4 py-2 text-[13px] text-red-600"
-            >
-              {errors.root.message}
-            </div>
-          ) : null}
-
-          <div className="flex items-center justify-end gap-4">
-            <Link
-              to={routes.admin}
-              className="text-[12px] tracking-[0.2em] text-[var(--lga-muted)] uppercase hover:text-[var(--lga-ink)]"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
-            >
-              Annuler
-            </Link>
-            <button
-              type="submit"
-              disabled={isSubmitting || updateProjet.isPending}
-              className="inline-flex h-[44px] items-center justify-center bg-black px-8 text-[12px] tracking-[0.2em] text-white uppercase transition-opacity hover:opacity-85 disabled:opacity-50"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 700 }}
-            >
-              {isSubmitting || updateProjet.isPending
-                ? 'Enregistrement…'
-                : 'Enregistrer'}
-            </button>
-          </div>
-        </form>
+          </form>
+        </Card>
       </div>
     </main>
   );
 }
 
-interface FieldProps {
-  label: string;
-  htmlFor: string;
-  error?: string;
-  hint?: string;
-  children: React.ReactNode;
-}
-
-function Field({ label, htmlFor, error, hint, children }: FieldProps) {
-  return (
-    <div className="flex flex-col">
-      <label htmlFor={htmlFor} className={LABEL_BASE} style={LABEL_STYLE}>
-        {label}
-      </label>
-      {children}
-      {hint && !error ? (
-        <span className="mt-1 text-[11px] text-[var(--lga-muted)]">{hint}</span>
-      ) : null}
-      {error ? (
-        <span className="mt-1 text-[12px] text-red-500">{error}</span>
-      ) : null}
-    </div>
-  );
-}
-
-function AddButton({ onClick, label }: { onClick: () => void; label: string }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="inline-flex items-center gap-2 border border-[var(--lga-ink)] px-3 py-2 text-[10px] tracking-[0.2em] text-[var(--lga-ink)] uppercase transition-opacity hover:opacity-70"
-      style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
-    >
-      <Plus className="h-3 w-3" strokeWidth={2} />
-      {label}
-    </button>
-  );
-}
-
-function RemoveButton({
-  onClick,
-  disabled,
-}: {
-  onClick: () => void;
-  disabled?: boolean;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      aria-label="Supprimer"
-      className="inline-flex h-[44px] w-[44px] items-center justify-center border border-[#c6c6c6] text-[var(--lga-muted)] transition-colors hover:border-red-400 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-[#c6c6c6] disabled:hover:text-[var(--lga-muted)]"
-    >
-      <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-    </button>
-  );
-}
+type ImageArrayErrors =
+  | {
+      [idx: number]:
+        | { img?: { message?: string }; alt?: { message?: string } }
+        | undefined;
+    }
+  | undefined;
 
 interface ImageArrayFieldsProps {
   fields: { id: string }[];
@@ -479,9 +405,7 @@ interface ImageArrayFieldsProps {
   name: 'drawings' | 'gallery';
   control: ReturnType<typeof useForm<FormValues>>['control'];
   register: ReturnType<typeof useForm<FormValues>>['register'];
-  errors:
-    | { img?: { message?: string }; alt?: { message?: string } }[]
-    | undefined;
+  errors: ImageArrayErrors;
 }
 
 function ImageArrayFields({
@@ -529,18 +453,22 @@ function ImageArrayFields({
             htmlFor={`${name}.${idx}.alt`}
             error={errors?.[idx]?.alt?.message}
           >
-            <input
+            <Input
               id={`${name}.${idx}.alt`}
-              type="text"
               {...register(`${name}.${idx}.alt` as const)}
-              className={cn(
-                INPUT_BASE,
-                errors?.[idx]?.alt && 'border-red-400 focus:border-red-500',
-              )}
-              style={{ fontFamily: 'var(--font-body)' }}
+              aria-invalid={errors?.[idx]?.alt ? 'true' : 'false'}
             />
           </Field>
-          <RemoveButton onClick={() => onRemove(idx)} />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => onRemove(idx)}
+            aria-label="Supprimer"
+            className="hover:border-red-400 hover:text-red-500"
+          >
+            <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+          </Button>
         </div>
       ))}
     </div>

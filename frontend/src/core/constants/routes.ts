@@ -3,11 +3,11 @@ const routes = {
   prestations: '/prestations',
   contact: '/contact',
   projetsList: '/projets',
-  projet: '/projets/:slug',
+  projets: (slug: string) => `/projets/${slug}`,
   adminLogin: '/admin/login',
   admin: '/admin',
   adminProjetNew: '/admin/projets/nouveau',
-  adminProjetEdit: '/admin/projets/:id/modifier',
+  adminProjetEdit: (id: string) => `/admin/projets/${id}/modifier`,
 };
 
 export default routes;

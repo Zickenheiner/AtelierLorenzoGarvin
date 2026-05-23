@@ -75,6 +75,9 @@ export class Project {
 
   @Prop({ type: [GalleryItemSchema], default: [] })
   gallery: GalleryItem[];
+
+  @Prop({ type: Boolean, default: false })
+  featured: boolean;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);

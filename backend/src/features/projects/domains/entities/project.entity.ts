@@ -71,6 +71,13 @@ export class ProjectEntity {
   })
   private readonly gallery: GalleryItem[];
 
+  @ApiProperty({
+    example: true,
+    description:
+      'Indique si le projet apparaît dans le carousel de la page accueil',
+  })
+  private readonly featured: boolean;
+
   constructor(
     _id: mongoose.Types.ObjectId,
     slug: string,
@@ -81,6 +88,7 @@ export class ProjectEntity {
     spec: Spec[],
     drawings: Drawing[],
     gallery: GalleryItem[],
+    featured: boolean,
   ) {
     this.id = _id;
     this.slug = slug;
@@ -91,6 +99,7 @@ export class ProjectEntity {
     this.spec = spec;
     this.drawings = drawings;
     this.gallery = gallery;
+    this.featured = featured;
   }
 
   // ———————GETTER———————
@@ -133,5 +142,9 @@ export class ProjectEntity {
 
   getGallery(): GalleryItem[] {
     return this.gallery;
+  }
+
+  getFeatured(): boolean {
+    return this.featured;
   }
 }

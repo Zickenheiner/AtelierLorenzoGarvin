@@ -1,3 +1,6 @@
+import { Button } from '@/core/components/ui/button';
+import { Card } from '@/core/components/ui/card';
+import { Container } from '@/core/components/ui/container';
 import {
   Dialog,
   DialogContent,
@@ -6,6 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/core/components/ui/dialog';
+import { EmptyState } from '@/core/components/ui/empty-state';
+import { ErrorAlert } from '@/core/components/ui/error-alert';
+import { Heading } from '@/core/components/ui/heading';
+import { LoadingState } from '@/core/components/ui/loading-state';
+import { Switch } from '@/core/components/ui/switch';
 import routes from '@/core/constants/routes';
 import { toAssetUrl } from '@/core/utils/asset-url';
 import { useLogout, useMe } from '@/features/admin/domain/hooks/auth.hook';
@@ -13,6 +21,7 @@ import type { ProjetEntity } from '@/features/projets/domain/entities/projet.ent
 import {
   useDeleteProjet,
   useProjets,
+  useUpdateProjet,
 } from '@/features/projets/domain/hooks/projet.hook';
 import { Eye, LogOut, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
@@ -45,15 +54,12 @@ export default function AdminProjetListPage() {
 
   return (
     <main className="min-h-[100dvh] bg-[var(--lga-surface)] px-6 py-12">
-      <div className="mx-auto w-full max-w-[1216px]">
+      <Container>
         <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1
-              className="text-[28px] leading-[36px] tracking-[-0.02em] text-[var(--lga-ink)]"
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
-            >
+            <Heading as="h1" level="h1">
               Projets
-            </h1>
+            </Heading>
             <p
               className="mt-1 text-[13px] tracking-[0.05em] text-[var(--lga-muted)]"
               style={{ fontFamily: 'var(--font-body)' }}
@@ -64,61 +70,49 @@ export default function AdminProjetListPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <Link
-              to={routes.adminProjetNew}
-              className="inline-flex h-[40px] items-center gap-2 bg-black px-5 text-[11px] tracking-[0.2em] text-white uppercase transition-opacity hover:opacity-85"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 700 }}
-            >
-              <Plus className="h-3.5 w-3.5" strokeWidth={2} />
-              Ajouter
-            </Link>
-            <button
+            <Button asChild size="sm">
+              <Link to={routes.adminProjetNew}>
+                <Plus className="h-3.5 w-3.5" strokeWidth={2} />
+                Ajouter
+              </Link>
+            </Button>
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={handleLogout}
               disabled={logout.isPending}
-              className="inline-flex h-[40px] items-center gap-2 border border-[#c6c6c6] px-4 text-[11px] tracking-[0.2em] text-[var(--lga-muted)] uppercase transition-colors hover:border-[var(--lga-ink)] hover:text-[var(--lga-ink)] disabled:opacity-50"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
             >
               <LogOut className="h-3.5 w-3.5" strokeWidth={1.5} />
               {logout.isPending ? 'Déconnexion…' : 'Déconnexion'}
-            </button>
+            </Button>
           </div>
         </header>
 
         {isLoading ? (
-          <div className="flex min-h-[40vh] items-center justify-center text-[var(--lga-muted)]">
-            Chargement…
-          </div>
+          <LoadingState />
         ) : error ? (
-          <div
-            role="alert"
-            className="rounded-sm border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-600"
-          >
-            Erreur : {error.message}
-          </div>
+          <ErrorAlert>Erreur : {error.message}</ErrorAlert>
         ) : !projets || projets.length === 0 ? (
-          <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 rounded-sm bg-white p-10 text-center shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
-            <p
-              className="text-[15px] text-[var(--lga-ink)]"
-              style={{ fontFamily: 'var(--font-body)' }}
-            >
-              Aucun projet pour le moment.
-            </p>
-            <Link
-              to={routes.adminProjetNew}
-              className="inline-flex h-[40px] items-center gap-2 bg-black px-5 text-[11px] tracking-[0.2em] text-white uppercase transition-opacity hover:opacity-85"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 700 }}
-            >
-              <Plus className="h-3.5 w-3.5" strokeWidth={2} />
-              Créer le premier projet
-            </Link>
-          </div>
+          <EmptyState
+            message="Aucun projet pour le moment."
+            action={
+              <Button asChild size="sm">
+                <Link to={routes.adminProjetNew}>
+                  <Plus className="h-3.5 w-3.5" strokeWidth={2} />
+                  Créer le premier projet
+                </Link>
+              </Button>
+            }
+          />
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {projets.map((projet) => (
-              <article
+              <Card
                 key={projet.id}
-                className="flex flex-col overflow-hidden bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+                padding="none"
+                elevation="sm"
+                className="flex flex-col overflow-hidden"
               >
                 <div className="relative aspect-[4/3] w-full bg-[var(--lga-surface)]">
                   <img
@@ -130,15 +124,9 @@ export default function AdminProjetListPage() {
 
                 <div className="flex flex-1 flex-col gap-4 p-5">
                   <div className="flex flex-col gap-1">
-                    <h2
-                      className="text-[18px] leading-6 tracking-[-0.01em] text-[var(--lga-ink)]"
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontWeight: 500,
-                      }}
-                    >
+                    <Heading as="h2" level="h3">
                       {projet.title}
-                    </h2>
+                    </Heading>
                     <p className="font-mono text-[11px] tracking-[0.05em] text-[var(--lga-muted)]">
                       /{projet.slug}
                     </p>
@@ -151,51 +139,56 @@ export default function AdminProjetListPage() {
                     {projet.resume}
                   </p>
 
+                  <FeaturedToggle projet={projet} />
+
                   <div className="mt-auto flex items-center gap-2 border-t border-[var(--lga-footer)] pt-4">
-                    <Link
-                      to={routes.projets(projet.slug)}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="xs"
+                      className="flex-1"
                       title="Voir la page publique"
-                      className="inline-flex h-[36px] flex-1 items-center justify-center gap-1.5 border border-[#e4e4e4] text-[10px] tracking-[0.2em] text-[var(--lga-ink)] uppercase transition-colors hover:border-[var(--lga-ink)]"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontWeight: 600,
-                      }}
                     >
-                      <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
-                      Voir
-                    </Link>
-                    <Link
-                      to={routes.adminProjetEdit(projet.id)}
+                      <Link
+                        to={routes.projets(projet.slug)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
+                        Voir
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      size="xs"
+                      className="flex-1"
                       title="Modifier"
-                      className="inline-flex h-[36px] flex-1 items-center justify-center gap-1.5 border border-[var(--lga-ink)] bg-[var(--lga-ink)] text-[10px] tracking-[0.2em] text-white uppercase transition-opacity hover:opacity-85"
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontWeight: 600,
-                      }}
                     >
-                      <Pencil className="h-3.5 w-3.5" strokeWidth={1.5} />
-                      Modifier
-                    </Link>
-                    <button
+                      <Link to={routes.adminProjetEdit(projet.id)}>
+                        <Pencil className="h-3.5 w-3.5" strokeWidth={1.5} />
+                        Modifier
+                      </Link>
+                    </Button>
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={() => {
                         setDeleteError(null);
                         setToDelete(projet);
                       }}
                       title="Supprimer"
-                      className="inline-flex h-[36px] w-[36px] items-center justify-center border border-[#e4e4e4] text-[var(--lga-muted)] transition-colors hover:border-red-400 hover:text-red-500"
+                      className="hover:border-red-400 hover:text-red-500"
                     >
                       <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-                    </button>
+                    </Button>
                   </div>
                 </div>
-              </article>
+              </Card>
             ))}
           </div>
         )}
-      </div>
+      </Container>
 
       <Dialog
         open={!!toDelete}
@@ -216,37 +209,53 @@ export default function AdminProjetListPage() {
             </DialogDescription>
           </DialogHeader>
 
-          {deleteError ? (
-            <div
-              role="alert"
-              className="rounded-sm border border-red-200 bg-red-50 px-4 py-2 text-[13px] text-red-600"
-            >
-              {deleteError}
-            </div>
-          ) : null}
+          {deleteError ? <ErrorAlert>{deleteError}</ErrorAlert> : null}
 
           <DialogFooter>
-            <button
+            <Button
               type="button"
+              variant="secondary"
+              size="sm"
               onClick={() => setToDelete(null)}
               disabled={deleteProjet.isPending}
-              className="inline-flex h-[40px] items-center justify-center border border-[#c6c6c6] px-5 text-[11px] tracking-[0.2em] text-[var(--lga-ink)] uppercase transition-opacity hover:opacity-70 disabled:opacity-50"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
             >
               Annuler
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="destructive"
+              size="sm"
               onClick={handleConfirmDelete}
               disabled={deleteProjet.isPending}
-              className="inline-flex h-[40px] items-center justify-center bg-red-600 px-5 text-[11px] tracking-[0.2em] text-white uppercase transition-opacity hover:opacity-85 disabled:opacity-50"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 700 }}
             >
               {deleteProjet.isPending ? 'Suppression…' : 'Supprimer'}
-            </button>
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </main>
+  );
+}
+
+function FeaturedToggle({ projet }: { projet: ProjetEntity }) {
+  const updateProjet = useUpdateProjet(projet.id);
+
+  const handleChange = (next: boolean) => {
+    updateProjet.mutate({ featured: next });
+  };
+
+  return (
+    <label
+      className="flex items-center justify-between gap-3 border-t border-[var(--lga-footer)] pt-4 text-[11px] tracking-[0.15em] text-[var(--lga-muted)] uppercase"
+      style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
+    >
+      <span>Carousel accueil</span>
+      <Switch
+        size="sm"
+        checked={projet.featured}
+        onCheckedChange={handleChange}
+        disabled={updateProjet.isPending}
+      />
+    </label>
   );
 }

@@ -1,3 +1,5 @@
+import { Button } from '@/core/components/ui/button';
+import { FieldError } from '@/core/components/ui/field';
 import { toAssetUrl } from '@/core/utils/asset-url';
 import { cn } from '@/core/utils/cn';
 import { Image as ImageIcon, Loader2, Upload, X } from 'lucide-react';
@@ -56,6 +58,7 @@ export default function ImageUploadField({
 
   const errorMessage = localError;
   const isLoading = upload.isPending;
+  const isInvalid = invalid || !!errorMessage;
 
   return (
     <div className="flex flex-col gap-2">
@@ -75,7 +78,7 @@ export default function ImageUploadField({
         <div
           className={cn(
             'group relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden border bg-[var(--lga-surface)]',
-            invalid || errorMessage ? 'border-red-400' : 'border-[#c6c6c6]',
+            isInvalid ? 'border-red-400' : 'border-[#c6c6c6]',
           )}
         >
           <img
@@ -84,26 +87,27 @@ export default function ImageUploadField({
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 hidden items-center justify-center gap-2 bg-black/50 group-hover:flex">
-            <button
+            <Button
               type="button"
+              size="xs"
               onClick={handlePick}
               disabled={disabled || isLoading}
-              className="inline-flex h-[36px] items-center gap-2 bg-white px-4 text-[10px] tracking-[0.2em] text-[var(--lga-ink)] uppercase transition-opacity hover:opacity-85 disabled:opacity-50"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
+              className="bg-white text-[var(--lga-ink)] hover:opacity-85"
             >
               <Upload className="h-3.5 w-3.5" strokeWidth={1.5} />
               Remplacer
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              size="xs"
+              variant="secondary"
               onClick={handleRemove}
               disabled={disabled || isLoading}
-              className="inline-flex h-[36px] items-center gap-2 border border-white px-4 text-[10px] tracking-[0.2em] text-white uppercase transition-opacity hover:opacity-85 disabled:opacity-50"
-              style={{ fontFamily: 'var(--font-body)', fontWeight: 600 }}
+              className="border-white bg-transparent text-white hover:opacity-85"
             >
               <X className="h-3.5 w-3.5" strokeWidth={1.5} />
               Retirer
-            </button>
+            </Button>
           </div>
         </div>
       ) : (
@@ -113,7 +117,7 @@ export default function ImageUploadField({
           disabled={disabled || isLoading}
           className={cn(
             'flex aspect-[16/10] w-full flex-col items-center justify-center gap-3 border border-dashed bg-[var(--lga-surface)] text-[var(--lga-muted)] transition-colors hover:border-[var(--lga-ink)] hover:text-[var(--lga-ink)] disabled:cursor-not-allowed disabled:opacity-50',
-            invalid || errorMessage ? 'border-red-400' : 'border-[#c6c6c6]',
+            isInvalid ? 'border-red-400' : 'border-[#c6c6c6]',
           )}
         >
           {isLoading ? (
@@ -138,9 +142,7 @@ export default function ImageUploadField({
         </button>
       )}
 
-      {errorMessage ? (
-        <span className="text-[12px] text-red-500">{errorMessage}</span>
-      ) : null}
+      {errorMessage ? <FieldError>{errorMessage}</FieldError> : null}
     </div>
   );
 }

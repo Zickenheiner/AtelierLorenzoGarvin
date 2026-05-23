@@ -28,4 +28,5 @@ export interface ProjetEntity {
   spec: ProjetSpec[];
   drawings: ProjetDrawing[];
   gallery: ProjetGalleryItem[];
+  featured: boolean;
 }

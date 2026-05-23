@@ -29,7 +29,7 @@ export default function ProjetPage() {
   }
 
   return (
-    <div className="flex flex-col gap-16 sm:gap-20 lg:gap-24">
+    <div className="flex flex-col gap-16 sm:gap-20 lg:gap-24 pb-16 sm:pb-20 lg:pb-24">
       <ProjetHero projet={projet} />
       <ProjetNarrative projet={projet} />
       <ProjetDrawings projet={projet} />

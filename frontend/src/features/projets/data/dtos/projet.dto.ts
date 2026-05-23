@@ -28,6 +28,7 @@ export interface ProjetResponseDto {
   spec: ProjetSpecDto[];
   drawings: ProjetDrawingDto[];
   gallery: ProjetGalleryItemDto[];
+  featured: boolean;
 }
 
 export interface ProjetCreateRequestDto {
@@ -38,6 +39,7 @@ export interface ProjetCreateRequestDto {
   spec: ProjetSpecDto[];
   drawings?: ProjetDrawingDto[];
   gallery?: ProjetGalleryItemDto[];
+  featured?: boolean;
 }
 
 export type ProjetUpdateRequestDto = Partial<ProjetCreateRequestDto>;

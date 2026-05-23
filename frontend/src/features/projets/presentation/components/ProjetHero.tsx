@@ -1,3 +1,4 @@
+import { Heading } from '@/core/components/ui/heading';
 import { toAssetUrl } from '@/core/utils/asset-url';
 import type { ProjetEntity } from '../../domain/entities/projet.entity';
 
@@ -17,12 +18,9 @@ export default function ProjetHero({ projet }: Props) {
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
       <div className="relative z-10 flex h-full max-w-[1216px] flex-col justify-end gap-6 px-6 pb-6 sm:px-8 lg:pb-10">
-        <h1
-          className="text-[44px] leading-[1.05] tracking-[-0.02em] text-[var(--lga-hero-text)] uppercase sm:text-[56px]"
-          style={{ fontFamily: 'var(--font-display)', fontWeight: 400 }}
-        >
+        <Heading as="h1" size="display" className="text-[var(--lga-hero-text)]">
           {projet.title}
-        </h1>
+        </Heading>
       </div>
     </section>
   );

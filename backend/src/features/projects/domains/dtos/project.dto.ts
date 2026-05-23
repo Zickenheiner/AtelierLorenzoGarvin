@@ -2,6 +2,7 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -139,6 +140,16 @@ export class CreateProjectDto {
   @ValidateNested({ each: true })
   @Type(() => GalleryItemDto)
   gallery?: GalleryItemDto[];
+
+  @ApiProperty({
+    example: false,
+    description:
+      'Indique si le projet apparaît dans le carousel de la page accueil',
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  featured?: boolean;
 }
 
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {}
