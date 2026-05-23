@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@/core/components/ui/dialog';
 import routes from '@/core/constants/routes';
+import { toAssetUrl } from '@/core/utils/asset-url';
 import { useLogout, useMe } from '@/features/admin/domain/hooks/auth.hook';
 import type { ProjetEntity } from '@/features/projets/domain/entities/projet.entity';
 import {
@@ -121,7 +122,7 @@ export default function AdminProjetListPage() {
               >
                 <div className="relative aspect-[4/3] w-full bg-[var(--lga-surface)]">
                   <img
-                    src={projet.hero.img}
+                    src={toAssetUrl(projet.hero.img)}
                     alt={projet.hero.alt || projet.title}
                     className="absolute inset-0 h-full w-full object-cover"
                   />
@@ -152,7 +153,7 @@ export default function AdminProjetListPage() {
 
                   <div className="mt-auto flex items-center gap-2 border-t border-[var(--lga-footer)] pt-4">
                     <Link
-                      to={`/projet/${projet.slug}`}
+                      to={`/projets/${projet.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       title="Voir la page publique"

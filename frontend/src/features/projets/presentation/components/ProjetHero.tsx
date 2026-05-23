@@ -1,3 +1,4 @@
+import { toAssetUrl } from '@/core/utils/asset-url';
 import type { ProjetEntity } from '../../domain/entities/projet.entity';
 
 interface Props {
@@ -8,7 +9,7 @@ export default function ProjetHero({ projet }: Props) {
   return (
     <section className="relative h-[70vh] min-h-[500px] w-full overflow-hidden lg:h-[700px]">
       <img
-        src={projet.hero.img}
+        src={toAssetUrl(projet.hero.img)}
         alt={projet.hero.alt || projet.title}
         className="absolute inset-0 h-full w-full object-cover"
       />

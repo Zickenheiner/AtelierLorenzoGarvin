@@ -10,6 +10,7 @@ const endpoints = {
     bySlug: (slug: string) => `/projects/slug/${slug}`,
     byId: (id: string) => `/projects/${id}`,
   },
+  uploads: '/uploads',
 };
 
 export default endpoints;

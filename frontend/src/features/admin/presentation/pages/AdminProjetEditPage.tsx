@@ -3,13 +3,14 @@ import { cn } from '@/core/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
 import { useEffect } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 import {
   useProjetById,
   useUpdateProjet,
 } from '@/features/projets/domain/hooks/projet.hook';
+import ImageUploadField from '../components/ImageUploadField';
 
 const imageSchema = z.object({
   img: z.string().min(1, 'URL requise'),
@@ -236,43 +237,41 @@ export default function AdminProjetEditPage() {
               Image hero
             </h2>
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <Field
-                label="URL / chemin"
-                htmlFor="hero.img"
-                error={errors.hero?.img?.message}
-              >
-                <input
-                  id="hero.img"
-                  type="text"
-                  aria-invalid={errors.hero?.img ? 'true' : 'false'}
-                  {...register('hero.img')}
-                  className={cn(
-                    INPUT_BASE,
-                    errors.hero?.img && 'border-red-400 focus:border-red-500',
-                  )}
-                  style={{ fontFamily: 'var(--font-body)' }}
-                />
-              </Field>
+            <Field
+              label="Image"
+              htmlFor="hero.img"
+              error={errors.hero?.img?.message}
+            >
+              <Controller
+                control={control}
+                name="hero.img"
+                render={({ field }) => (
+                  <ImageUploadField
+                    value={field.value}
+                    onChange={field.onChange}
+                    invalid={!!errors.hero?.img}
+                  />
+                )}
+              />
+            </Field>
 
-              <Field
-                label="Texte alternatif"
-                htmlFor="hero.alt"
-                error={errors.hero?.alt?.message}
-              >
-                <input
-                  id="hero.alt"
-                  type="text"
-                  aria-invalid={errors.hero?.alt ? 'true' : 'false'}
-                  {...register('hero.alt')}
-                  className={cn(
-                    INPUT_BASE,
-                    errors.hero?.alt && 'border-red-400 focus:border-red-500',
-                  )}
-                  style={{ fontFamily: 'var(--font-body)' }}
-                />
-              </Field>
-            </div>
+            <Field
+              label="Texte alternatif"
+              htmlFor="hero.alt"
+              error={errors.hero?.alt?.message}
+            >
+              <input
+                id="hero.alt"
+                type="text"
+                aria-invalid={errors.hero?.alt ? 'true' : 'false'}
+                {...register('hero.alt')}
+                className={cn(
+                  INPUT_BASE,
+                  errors.hero?.alt && 'border-red-400 focus:border-red-500',
+                )}
+                style={{ fontFamily: 'var(--font-body)' }}
+              />
+            </Field>
           </section>
 
           {/* SPECS */}
@@ -357,6 +356,7 @@ export default function AdminProjetEditPage() {
               fields={drawingsArray.fields}
               onRemove={(idx) => drawingsArray.remove(idx)}
               name="drawings"
+              control={control}
               register={register}
               errors={errors.drawings}
             />
@@ -379,6 +379,7 @@ export default function AdminProjetEditPage() {
               fields={galleryArray.fields}
               onRemove={(idx) => galleryArray.remove(idx)}
               name="gallery"
+              control={control}
               register={register}
               errors={errors.gallery}
             />
@@ -481,6 +482,7 @@ interface ImageArrayFieldsProps {
   fields: { id: string }[];
   onRemove: (idx: number) => void;
   name: 'drawings' | 'gallery';
+  control: ReturnType<typeof useForm<FormValues>>['control'];
   register: ReturnType<typeof useForm<FormValues>>['register'];
   errors:
     | { img?: { message?: string }; alt?: { message?: string } }[]
@@ -491,6 +493,7 @@ function ImageArrayFields({
   fields,
   onRemove,
   name,
+  control,
   register,
   errors,
 }: ImageArrayFieldsProps) {
@@ -503,26 +506,27 @@ function ImageArrayFields({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       {fields.map((field, idx) => (
         <div
           key={field.id}
-          className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_1fr_auto]"
+          className="grid grid-cols-1 gap-3 sm:grid-cols-[280px_1fr_auto] sm:items-end"
         >
           <Field
-            label="URL / chemin"
+            label="Image"
             htmlFor={`${name}.${idx}.img`}
             error={errors?.[idx]?.img?.message}
           >
-            <input
-              id={`${name}.${idx}.img`}
-              type="text"
-              {...register(`${name}.${idx}.img` as const)}
-              className={cn(
-                INPUT_BASE,
-                errors?.[idx]?.img && 'border-red-400 focus:border-red-500',
+            <Controller
+              control={control}
+              name={`${name}.${idx}.img` as const}
+              render={({ field: ctl }) => (
+                <ImageUploadField
+                  value={ctl.value}
+                  onChange={ctl.onChange}
+                  invalid={!!errors?.[idx]?.img}
+                />
               )}
-              style={{ fontFamily: 'var(--font-body)' }}
             />
           </Field>
           <Field

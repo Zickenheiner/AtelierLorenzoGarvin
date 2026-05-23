@@ -1,3 +1,4 @@
+import { toAssetUrl } from '@/core/utils/asset-url';
 import type { ProjetEntity } from '../../domain/entities/projet.entity';
 
 interface Props {
@@ -8,7 +9,7 @@ export default function ProjetGallery({ projet }: Props) {
   if (projet.gallery.length === 0) return null;
 
   return (
-    <section className="w-full bg-[var(--lga-bg)] px-6 py-16 sm:px-8 sm:py-20 lg:py-24">
+    <section className="w-full bg-[var(--lga-bg)] px-6 sm:px-8">
       <div className="mx-auto flex max-w-[1216px] flex-col gap-10">
         <header className="flex items-center gap-4">
           <h2
@@ -24,7 +25,7 @@ export default function ProjetGallery({ projet }: Props) {
           {projet.gallery.map((item, idx) => (
             <img
               key={`${item.img}-${idx}`}
-              src={item.img}
+              src={toAssetUrl(item.img)}
               alt={item.alt}
               className="block h-auto w-full object-cover sm:aspect-[384/300]"
             />

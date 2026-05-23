@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { Plus, X } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
-import { cn } from '@/core/utils/cn';
 import routes from '@/core/constants/routes';
+import { cn } from '@/core/utils/cn';
+import { Plus, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const NAV_LINKS = [
   { label: 'Accueil', href: routes.home },
-  { label: 'Projets', href: '#projets' },
+  { label: 'Projets', href: routes.projetsList },
   { label: 'Prestations', href: routes.prestations },
   { label: 'Contact', href: routes.contact },
 ];

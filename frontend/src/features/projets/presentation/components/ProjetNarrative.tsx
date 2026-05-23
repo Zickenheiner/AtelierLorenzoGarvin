@@ -11,13 +11,13 @@ export default function ProjetNarrative({ projet }: Props) {
     .filter(Boolean);
 
   return (
-    <section className="w-full bg-[var(--lga-bg)] px-6 py-16 sm:px-8 sm:py-20 lg:py-24">
-      <div className="mx-auto grid max-w-[1216px] grid-cols-1 gap-12 lg:grid-cols-[1fr_429px] lg:gap-16">
+    <section className="w-full bg-[var(--lga-bg)] px-6 sm:px-8">
+      <div className="mx-auto grid max-w-[1216px] grid-cols-1 gap-12 lg:grid-cols-[1fr_65%] lg:gap-16">
         <dl className="flex flex-col">
           {projet.spec.map((spec) => (
             <div
               key={spec.label}
-              className="flex items-center justify-between border-b border-[var(--lga-footer)] py-4 last:border-b-0"
+              className="flex items-center justify-between gap-4 border-b border-[var(--lga-footer)] py-4 last:border-b-0"
             >
               <dt
                 className="text-[12px] tracking-[0.05em] text-[var(--lga-ink)] uppercase"
@@ -26,7 +26,7 @@ export default function ProjetNarrative({ projet }: Props) {
                 {spec.label}
               </dt>
               <dd
-                className="text-[12px] tracking-[0.08em] text-[var(--lga-muted)]"
+                className="text-[12px] text-end tracking-[0.08em] text-[var(--lga-muted)]"
                 style={{ fontFamily: 'var(--font-body)', fontWeight: 400 }}
               >
                 {spec.value}
