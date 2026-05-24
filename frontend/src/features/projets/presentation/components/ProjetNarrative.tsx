@@ -12,31 +12,41 @@ export default function ProjetNarrative({ projet }: Props) {
     .map((p) => p.trim())
     .filter(Boolean);
 
+  const hasSpecs = projet.spec.length > 0;
+
   return (
     <Section>
       <Container>
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_65%] lg:gap-16">
-          <dl className="flex flex-col">
-            {projet.spec.map((spec) => (
-              <div
-                key={spec.label}
-                className="flex items-center justify-between gap-4 border-b border-[var(--lga-footer)] py-4 last:border-b-0"
-              >
-                <dt
-                  className="text-[12px] tracking-[0.05em] text-[var(--lga-ink)] uppercase"
-                  style={{ fontFamily: 'var(--font-body)', fontWeight: 700 }}
+        <div
+          className={
+            hasSpecs
+              ? 'grid grid-cols-1 gap-12 lg:grid-cols-[1fr_65%] lg:gap-16'
+              : 'flex flex-col gap-12'
+          }
+        >
+          {hasSpecs ? (
+            <dl className="flex flex-col">
+              {projet.spec.map((spec) => (
+                <div
+                  key={spec.label}
+                  className="flex items-center justify-between gap-4 border-b border-[var(--lga-footer)] py-4 last:border-b-0"
                 >
-                  {spec.label}
-                </dt>
-                <dd
-                  className="text-[12px] text-end tracking-[0.08em] text-[var(--lga-muted)]"
-                  style={{ fontFamily: 'var(--font-body)', fontWeight: 400 }}
-                >
-                  {spec.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
+                  <dt
+                    className="text-[12px] tracking-[0.05em] text-[var(--lga-ink)] uppercase"
+                    style={{ fontFamily: 'var(--font-body)', fontWeight: 700 }}
+                  >
+                    {spec.label}
+                  </dt>
+                  <dd
+                    className="text-[12px] text-end tracking-[0.08em] text-[var(--lga-muted)]"
+                    style={{ fontFamily: 'var(--font-body)', fontWeight: 400 }}
+                  >
+                    {spec.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          ) : null}
           <div className="flex flex-col gap-6">
             {paragraphs.map((para, idx) => (
               <p

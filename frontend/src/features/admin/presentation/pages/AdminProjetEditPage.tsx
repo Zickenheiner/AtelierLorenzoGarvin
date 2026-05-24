@@ -30,14 +30,12 @@ const schema = z.object({
   resume: z.string().min(1, 'Résumé requis').max(200, '200 caractères maximum'),
   narrative: z.string().min(1, 'Narration requise'),
   hero: imageSchema,
-  spec: z
-    .array(
-      z.object({
-        label: z.string().min(1, 'Libellé requis'),
-        value: z.string().min(1, 'Valeur requise'),
-      }),
-    )
-    .min(1, 'Au moins une spécification'),
+  spec: z.array(
+    z.object({
+      label: z.string().min(1, 'Libellé requis'),
+      value: z.string().min(1, 'Valeur requise'),
+    }),
+  ),
   drawings: z.array(imageSchema),
   gallery: z.array(imageSchema),
 });
@@ -66,7 +64,7 @@ export default function AdminProjetEditPage() {
       resume: '',
       narrative: '',
       hero: { img: '', alt: '' },
-      spec: [{ label: '', value: '' }],
+      spec: [],
       drawings: [],
       gallery: [],
     },
@@ -83,7 +81,7 @@ export default function AdminProjetEditPage() {
       resume: projet.resume,
       narrative: projet.narrative,
       hero: { img: projet.hero.img, alt: projet.hero.alt },
-      spec: projet.spec.length > 0 ? projet.spec : [{ label: '', value: '' }],
+      spec: projet.spec,
       drawings: projet.drawings,
       gallery: projet.gallery,
     });
@@ -97,8 +95,8 @@ export default function AdminProjetEditPage() {
         narrative: values.narrative,
         hero: values.hero,
         spec: values.spec,
-        drawings: values.drawings.length > 0 ? values.drawings : undefined,
-        gallery: values.gallery.length > 0 ? values.gallery : undefined,
+        drawings: values.drawings,
+        gallery: values.gallery,
       });
       navigate(routes.admin, { replace: true });
     } catch (err) {
@@ -240,7 +238,12 @@ export default function AdminProjetEditPage() {
 
             <section className="flex flex-col gap-6">
               <div className="flex items-center justify-between">
-                <SectionTitle>Spécifications</SectionTitle>
+                <SectionTitle>
+                  Spécifications{' '}
+                  <span className="font-normal text-[var(--lga-muted)]">
+                    (optionnel)
+                  </span>
+                </SectionTitle>
                 <Button
                   type="button"
                   variant="secondary"
@@ -252,58 +255,57 @@ export default function AdminProjetEditPage() {
                 </Button>
               </div>
 
-              {errors.spec?.message ? (
-                <p className="text-[12px] text-red-500">
-                  {errors.spec.message}
+              {specArray.fields.length === 0 ? (
+                <p className="text-[12px] text-[var(--lga-muted)] italic">
+                  Aucune entrée.
                 </p>
-              ) : null}
-
-              <div className="flex flex-col gap-4">
-                {specArray.fields.map((field, idx) => (
-                  <div
-                    key={field.id}
-                    className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_1fr_auto]"
-                  >
-                    <Field
-                      label="Libellé"
-                      htmlFor={`spec.${idx}.label`}
-                      error={errors.spec?.[idx]?.label?.message}
+              ) : (
+                <div className="flex flex-col gap-4">
+                  {specArray.fields.map((field, idx) => (
+                    <div
+                      key={field.id}
+                      className="grid grid-cols-1 items-end gap-3 sm:grid-cols-[1fr_1fr_auto]"
                     >
-                      <Input
-                        id={`spec.${idx}.label`}
-                        {...register(`spec.${idx}.label` as const)}
-                        aria-invalid={
-                          errors.spec?.[idx]?.label ? 'true' : 'false'
-                        }
-                      />
-                    </Field>
-                    <Field
-                      label="Valeur"
-                      htmlFor={`spec.${idx}.value`}
-                      error={errors.spec?.[idx]?.value?.message}
-                    >
-                      <Input
-                        id={`spec.${idx}.value`}
-                        {...register(`spec.${idx}.value` as const)}
-                        aria-invalid={
-                          errors.spec?.[idx]?.value ? 'true' : 'false'
-                        }
-                      />
-                    </Field>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => specArray.remove(idx)}
-                      disabled={specArray.fields.length === 1}
-                      aria-label="Supprimer"
-                      className="hover:border-red-400 hover:text-red-500"
-                    >
-                      <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-                    </Button>
-                  </div>
-                ))}
-              </div>
+                      <Field
+                        label="Libellé"
+                        htmlFor={`spec.${idx}.label`}
+                        error={errors.spec?.[idx]?.label?.message}
+                      >
+                        <Input
+                          id={`spec.${idx}.label`}
+                          {...register(`spec.${idx}.label` as const)}
+                          aria-invalid={
+                            errors.spec?.[idx]?.label ? 'true' : 'false'
+                          }
+                        />
+                      </Field>
+                      <Field
+                        label="Valeur"
+                        htmlFor={`spec.${idx}.value`}
+                        error={errors.spec?.[idx]?.value?.message}
+                      >
+                        <Input
+                          id={`spec.${idx}.value`}
+                          {...register(`spec.${idx}.value` as const)}
+                          aria-invalid={
+                            errors.spec?.[idx]?.value ? 'true' : 'false'
+                          }
+                        />
+                      </Field>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => specArray.remove(idx)}
+                        aria-label="Supprimer"
+                        className="hover:border-red-400 hover:text-red-500"
+                      >
+                        <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
 
             <section className="flex flex-col gap-6">

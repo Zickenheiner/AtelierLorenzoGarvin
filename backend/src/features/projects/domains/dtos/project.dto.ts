@@ -116,11 +116,13 @@ export class CreateProjectDto {
   @ApiProperty({
     type: [SpecDto],
     description: 'Spécifications techniques',
+    required: false,
   })
+  @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => SpecDto)
-  spec: SpecDto[];
+  spec?: SpecDto[];
 
   @ApiProperty({
     type: [DrawingDto],
