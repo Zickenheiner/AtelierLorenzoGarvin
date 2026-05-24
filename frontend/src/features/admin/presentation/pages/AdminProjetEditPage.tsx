@@ -27,7 +27,7 @@ const imageSchema = z.object({
 
 const schema = z.object({
   title: z.string().min(1, 'Titre requis'),
-  resume: z.string().min(1, 'Résumé requis'),
+  resume: z.string().min(1, 'Résumé requis').max(200, '200 caractères maximum'),
   narrative: z.string().min(1, 'Narration requise'),
   hero: imageSchema,
   spec: z
@@ -56,6 +56,7 @@ export default function AdminProjetEditPage() {
     control,
     reset,
     setError,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -165,7 +166,6 @@ export default function AdminProjetEditPage() {
                 label="Titre"
                 htmlFor="title"
                 error={errors.title?.message}
-                hint="Si tu modifies le titre, le slug (URL) sera régénéré automatiquement."
               >
                 <Input
                   id="title"
@@ -178,10 +178,12 @@ export default function AdminProjetEditPage() {
                 label="Résumé"
                 htmlFor="resume"
                 error={errors.resume?.message}
+                hint={`${(watch('resume') ?? '').length} / 200 caractères`}
               >
                 <Textarea
                   id="resume"
                   rows={2}
+                  maxLength={200}
                   aria-invalid={errors.resume ? 'true' : 'false'}
                   {...register('resume')}
                 />

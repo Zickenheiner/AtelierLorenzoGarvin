@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 
@@ -95,10 +96,12 @@ export class CreateProjectDto {
 
   @ApiProperty({
     example: 'Une commode 4 tiroirs en noyer massif huilé.',
-    description: 'Résumé court',
+    description: 'Résumé court (200 caractères max)',
+    maxLength: 200,
   })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(200, { message: 'Le résumé ne doit pas dépasser 200 caractères' })
   resume: string;
 
   @ApiProperty({

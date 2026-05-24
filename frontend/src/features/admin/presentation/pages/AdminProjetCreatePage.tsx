@@ -22,7 +22,7 @@ const imageSchema = z.object({
 
 const schema = z.object({
   title: z.string().min(1, 'Titre requis'),
-  resume: z.string().min(1, 'Résumé requis'),
+  resume: z.string().min(1, 'Résumé requis').max(200, '200 caractères maximum'),
   narrative: z.string().min(1, 'Narration requise'),
   hero: imageSchema,
   spec: z
@@ -48,6 +48,7 @@ export default function AdminProjetCreatePage() {
     handleSubmit,
     control,
     setError,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -122,7 +123,6 @@ export default function AdminProjetCreatePage() {
                 label="Titre"
                 htmlFor="title"
                 error={errors.title?.message}
-                hint="Le slug (URL) sera généré automatiquement à partir du titre."
               >
                 <Input
                   id="title"
@@ -136,10 +136,12 @@ export default function AdminProjetCreatePage() {
                 label="Résumé"
                 htmlFor="resume"
                 error={errors.resume?.message}
+                hint={`${(watch('resume') ?? '').length} / 200 caractères`}
               >
                 <Textarea
                   id="resume"
                   rows={2}
+                  maxLength={200}
                   placeholder="Une commode 4 tiroirs en noyer massif huilé."
                   aria-invalid={errors.resume ? 'true' : 'false'}
                   {...register('resume')}

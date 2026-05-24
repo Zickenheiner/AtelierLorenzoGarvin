@@ -9,10 +9,15 @@ import { Heading } from '@/core/components/ui/heading';
 import routes from '@/core/constants/routes';
 import { toAssetUrl } from '@/core/utils/asset-url';
 import { useProjets } from '@/features/projets/domain/hooks/projet.hook';
+import Autoplay from 'embla-carousel-autoplay';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function SelectionSection() {
   const { data: projets } = useProjets();
+  const autoplay = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true }),
+  );
 
   const featured = (projets ?? []).filter((p) => p.featured);
 
@@ -30,7 +35,11 @@ export default function SelectionSection() {
           </Heading>
         </header>
 
-        <Carousel opts={{ loop: featured.length > 1 }} className="w-full">
+        <Carousel
+          opts={{ loop: featured.length > 1 }}
+          plugins={featured.length > 1 ? [autoplay.current] : []}
+          className="w-full"
+        >
           <CarouselContent>
             {featured.map((projet) => (
               <CarouselItem key={projet.id}>
