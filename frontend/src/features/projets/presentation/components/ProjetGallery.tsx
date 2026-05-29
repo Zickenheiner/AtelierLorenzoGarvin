@@ -1,15 +1,25 @@
+import { useState } from 'react';
 import { Container } from '@/core/components/ui/container';
 import { Heading } from '@/core/components/ui/heading';
 import { Section } from '@/core/components/ui/section';
 import { toAssetUrl } from '@/core/utils/asset-url';
 import type { ProjetEntity } from '../../domain/entities/projet.entity';
+import Lightbox from './Lightbox';
 
 interface Props {
   projet: ProjetEntity;
 }
 
 export default function ProjetGallery({ projet }: Props) {
+  const [open, setOpen] = useState(false);
+  const [initialIndex, setInitialIndex] = useState(0);
+
   if (projet.gallery.length === 0) return null;
+
+  const images = projet.gallery.map((item) => ({
+    src: toAssetUrl(item.img),
+    alt: item.alt,
+  }));
 
   return (
     <Section>
@@ -24,16 +34,33 @@ export default function ProjetGallery({ projet }: Props) {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {projet.gallery.map((item, idx) => (
-              <img
+              <button
                 key={`${item.img}-${idx}`}
-                src={toAssetUrl(item.img)}
-                alt={item.alt}
-                className="block h-auto w-full object-cover sm:aspect-[384/300]"
-              />
+                type="button"
+                onClick={() => {
+                  setInitialIndex(idx);
+                  setOpen(true);
+                }}
+                className="block cursor-zoom-in"
+                aria-label={`Agrandir ${item.alt}`}
+              >
+                <img
+                  src={toAssetUrl(item.img)}
+                  alt={item.alt}
+                  className="block h-auto w-full object-cover sm:aspect-[384/300]"
+                />
+              </button>
             ))}
           </div>
         </div>
       </Container>
+
+      <Lightbox
+        images={images}
+        open={open}
+        onOpenChange={setOpen}
+        initialIndex={initialIndex}
+      />
     </Section>
   );
 }

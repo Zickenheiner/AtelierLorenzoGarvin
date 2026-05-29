@@ -1,8 +1,5 @@
 import { UploadResponseDto } from '@features/uploads/domains/dtos/upload.dto';
-import {
-  PUBLIC_PREFIX,
-  multerImageOptions,
-} from '@features/uploads/utils/upload-config';
+import { multerImageOptions } from '@features/uploads/utils/upload-config';
 import {
   BadRequestException,
   Controller,
@@ -18,14 +15,17 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+import { CloudinaryService } from '../implementation/services/cloudinary.service';
 
 @ApiBearerAuth('AccessToken')
 @Controller('uploads')
 export class UploadsController {
+  constructor(private readonly cloudinaryService: CloudinaryService) {}
+
   @ApiOperation({
-    summary: 'Upload une image',
+    summary: 'Upload une image vers Cloudinary',
     description:
-      'Upload une image (jpg/png/webp, max 5 MB) et retourne son URL publique',
+      'Upload une image (jpg/png/webp, max 5 MB) vers Cloudinary et retourne son URL avec transformations f_auto,q_auto',
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -47,10 +47,13 @@ export class UploadsController {
   })
   @Post()
   @UseInterceptors(FileInterceptor('file', multerImageOptions))
-  upload(@UploadedFile() file: Express.Multer.File): UploadResponseDto {
+  async upload(
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UploadResponseDto> {
     if (!file) {
       throw new BadRequestException('Aucun fichier reçu');
     }
-    return { url: `${PUBLIC_PREFIX}/${file.filename}` };
+    const url = await this.cloudinaryService.uploadBuffer(file.buffer);
+    return { url };
   }
 }

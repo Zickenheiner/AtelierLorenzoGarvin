@@ -15,6 +15,9 @@ dev-compass:
 dev-down:
 	$(DEV) down
 
+dev-restart:
+	$(DEV) down && $(DEV) up --build -d
+
 dev-logs:
 	$(DEV) logs -f
 
@@ -33,7 +36,7 @@ down:
 	$(PROD) down
 
 restart:
-	$(PROD) restart
+	$(PROD) down && $(PROD) up --build -d
 
 logs:
 	$(PROD) logs -f
@@ -66,6 +69,6 @@ dev-setup:
 setup:
 	@sh setup.prod.sh
 
-.PHONY: dev-up dev-compass dev-down dev-logs dev-sh-% \
+.PHONY: dev-up dev-compass dev-down dev-restart dev-logs dev-sh-% \
         up down restart logs logs-% sh-% deploy \
         mongo-sh mongo-sh-dev dev-setup

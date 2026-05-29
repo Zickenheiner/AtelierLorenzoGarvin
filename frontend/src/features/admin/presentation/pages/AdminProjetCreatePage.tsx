@@ -124,7 +124,7 @@ export default function AdminProjetCreatePage() {
               >
                 <Input
                   id="title"
-                  placeholder="Commode en noyer massif"
+                  placeholder="Entrer le titre du projet"
                   aria-invalid={errors.title ? 'true' : 'false'}
                   {...register('title')}
                 />
@@ -140,7 +140,7 @@ export default function AdminProjetCreatePage() {
                   id="resume"
                   rows={2}
                   maxLength={200}
-                  placeholder="Une commode 4 tiroirs en noyer massif huilé."
+                  placeholder="Ecrivez un résumé concis du projet (200 caractères max) qui apparaîtra sur la page d'accueil"
                   aria-invalid={errors.resume ? 'true' : 'false'}
                   {...register('resume')}
                 />
@@ -155,7 +155,7 @@ export default function AdminProjetCreatePage() {
                 <Textarea
                   id="narrative"
                   rows={8}
-                  placeholder="Pièce inspirée du mobilier scandinave des années 60…"
+                  placeholder="Racontez l'histoire du projet, les défis rencontrés, les solutions apportées, etc. Cette narration apparaîtra sur la page du projet."
                   aria-invalid={errors.narrative ? 'true' : 'false'}
                   {...register('narrative')}
                 />
@@ -190,7 +190,7 @@ export default function AdminProjetCreatePage() {
               >
                 <Input
                   id="hero.alt"
-                  placeholder="Commode — vue principale"
+                  placeholder="Entrer un texte alternatif décrivant l'image hero"
                   aria-invalid={errors.hero?.alt ? 'true' : 'false'}
                   {...register('hero.alt')}
                 />
@@ -234,7 +234,7 @@ export default function AdminProjetCreatePage() {
                       >
                         <Input
                           id={`spec.${idx}.label`}
-                          placeholder="Bois"
+                          placeholder="Entrer le libellé de la spécification"
                           {...register(`spec.${idx}.label` as const)}
                           aria-invalid={
                             errors.spec?.[idx]?.label ? 'true' : 'false'
@@ -248,7 +248,7 @@ export default function AdminProjetCreatePage() {
                       >
                         <Input
                           id={`spec.${idx}.value`}
-                          placeholder="Noyer massif"
+                          placeholder="Entrer la valeur de la spécification"
                           {...register(`spec.${idx}.value` as const)}
                           aria-invalid={
                             errors.spec?.[idx]?.value ? 'true' : 'false'
@@ -297,7 +297,7 @@ export default function AdminProjetCreatePage() {
                 control={control}
                 register={register}
                 errors={errors.drawings}
-                placeholderAlt="Plan technique vue de face"
+                placeholderAlt="Entrer un texte alternatif décrivant l'image de la galerie"
               />
             </section>
 
@@ -327,7 +327,7 @@ export default function AdminProjetCreatePage() {
                 control={control}
                 register={register}
                 errors={errors.gallery}
-                placeholderAlt="Vue de face"
+                placeholderAlt="Entrer un texte alternatif décrivant l'image de la galerie"
               />
             </section>
 
