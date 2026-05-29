@@ -1,9 +1,12 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
-import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from '@core/guards/access-token.guard';
 import { AtStrategy } from '@core/strategies/at.strategy';
+import { AuthModule } from '@features/auth/auth.module';
+import { ProjectsModule } from '@features/projects/projects.module';
+import { UploadsModule } from '@features/uploads/uploads.module';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { AtStrategy } from '@core/strategies/at.strategy';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
+    ProjectsModule,
+    UploadsModule,
   ],
   providers: [
     AtStrategy,

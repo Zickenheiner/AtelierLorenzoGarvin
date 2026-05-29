@@ -28,6 +28,20 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+
+  --color-lga-bg: var(--lga-bg);
+  --color-lga-surface: var(--lga-surface);
+  --color-lga-footer: var(--lga-footer);
+  --color-lga-ink: var(--lga-ink);
+  --color-lga-muted: var(--lga-muted);
+  --color-lga-subtle: var(--lga-subtle);
+  --color-lga-footer-ink: var(--lga-footer-ink);
+  --color-lga-hero-text: var(--lga-hero-text);
+  --color-lga-hero-tint: var(--lga-hero-tint);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -60,6 +74,21 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+
+  /* LGA brand tokens (mapped to Figma values) */
+  --lga-bg: #f9f9f9;
+  --lga-surface: #f3f3f4;
+  --lga-footer: #e2e2e2;
+  --lga-ink: #323232;
+  --lga-muted: #777777;
+  --lga-subtle: #737373;
+  --lga-footer-ink: #525252;
+  --lga-hero-text: #e2e2e2;
+  --lga-hero-tint: #5e5e5e;
+
+  /* Radikal n'est pas libre de droits — fallback Inter (proche visuellement) */
+  --font-display: 'Radikal', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .dark {
@@ -94,7 +123,33 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-lga-bg text-foreground;
+    font-family: var(--font-body);
+    line-height: 1.75;
+    cursor:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='6' fill='%23323232' stroke='white' stroke-width='1'/></svg>")
+        14 14,
+      auto;
+  }
+
+  p,
+  li,
+  dd,
+  dt {
+    line-height: 1.85;
+  }
+
+  a,
+  button,
+  [role='button'],
+  [role='menuitem'],
+  label,
+  summary,
+  select {
+    cursor:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M8 20 L16 12 L24 20' fill='none' stroke='white' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/><path d='M8 20 L16 12 L24 20' fill='none' stroke='%23323232' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/></svg>")
+        16 12,
+      pointer;
   }
 }
 

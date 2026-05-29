@@ -3,7 +3,8 @@ import {
   getAccessToken,
   getRefreshToken,
 } from '@/core/local/storage';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
+import Layout from './Layout';
 
 interface Props {
   redirect: string;
@@ -16,7 +17,7 @@ export default function Public({ redirect }: Props) {
 
   if (!accessToken && !refreshToken) {
     clearTokens();
-    return <Outlet />;
+    return <Layout />;
   }
 
   return <Navigate to={redirect} state={{ from: location }} replace />;

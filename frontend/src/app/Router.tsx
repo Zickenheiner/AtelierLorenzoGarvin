@@ -1,31 +1,44 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Private from './Private';
-import Public from './Public';
 import routes from '@/core/constants/routes';
+import AccueilPage from '@/features/accueil/presentation/pages/AccueilPage';
+import AdminLoginPage from '@/features/admin/presentation/pages/AdminLoginPage';
+import AdminProjetCreatePage from '@/features/admin/presentation/pages/AdminProjetCreatePage';
+import AdminProjetEditPage from '@/features/admin/presentation/pages/AdminProjetEditPage';
+import AdminProjetListPage from '@/features/admin/presentation/pages/AdminProjetListPage';
+import ContactPage from '@/features/contact/presentation/pages/ContactPage';
+import PrestationsPage from '@/features/prestations/presentation/pages/PrestationsPage';
+import ProjetPage from '@/features/projets/presentation/pages/ProjetPage';
+import ProjetsListPage from '@/features/projets/presentation/pages/ProjetsListPage';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Layout from './Layout';
+import Private from './Private';
 
 export default function Router() {
-  const PublicRoutes = () => {
-    return (
-      <Route element={<Public redirect={routes.home} />}>
-        <Route path={routes.login} element={<h1>Public Route</h1>} />
-      </Route>
-    );
-  };
-
-  const PrivateRoutes = () => {
-    return (
-      <Route element={<Private redirect={routes.login} />}>
-        <Route path={routes.home} element={<h1>Private Route</h1>} />
-      </Route>
-    );
-  };
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route>
-          {PublicRoutes()}
-          {PrivateRoutes()}
+        {/* Routes publiques avec Layout (header + footer) */}
+        <Route element={<Layout />}>
+          <Route path={routes.home} element={<AccueilPage />} />
+          <Route path={routes.prestations} element={<PrestationsPage />} />
+          <Route path={routes.contact} element={<ContactPage />} />
+          <Route path={routes.projetsList} element={<ProjetsListPage />} />
+          <Route path={routes.projets(':slug')} element={<ProjetPage />} />
+        </Route>
+
+        {/* Login admin — pas de Layout, page autonome */}
+        <Route path={routes.adminLogin} element={<AdminLoginPage />} />
+
+        {/* Routes privées admin */}
+        <Route element={<Private redirect={routes.adminLogin} />}>
+          <Route path={routes.admin} element={<AdminProjetListPage />} />
+          <Route
+            path={routes.adminProjetNew}
+            element={<AdminProjetCreatePage />}
+          />
+          <Route
+            path={routes.adminProjetEdit(':id')}
+            element={<AdminProjetEditPage />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
