@@ -1,6 +1,6 @@
 import routes from '@/core/constants/routes';
 import { cn } from '@/core/utils/cn';
-import { Plus, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -31,8 +31,8 @@ export default function Header() {
   return (
     <>
       <header className="fixed top-0 right-0 left-0 z-50 w-full bg-[var(--lga-bg)]">
-        <div className="mx-auto flex items-center justify-between border-b border-gray-200 px-8 py-2">
-          <a href="/" className="flex items-center gap-3">
+        <div className="mx-auto flex items-center justify-between border-b border-gray-200 px-2 sm:px-4 md:px-8 py-2">
+          <div className="flex items-center gap-4 max-md:justify-between w-full">
             <img
               src="https://www.lorenzogarvin.eu/assets/lgalogo100x100.png"
               alt="LGA"
@@ -44,7 +44,21 @@ export default function Header() {
             >
               atelier d&rsquo;architecture LGA
             </span>
-          </a>
+            <button
+              type="button"
+              aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              aria-expanded={isOpen}
+              aria-controls="mobile-sidebar"
+              onClick={() => setIsOpen((v) => !v)}
+              className="relative z-[60] inline-flex h-10 w-10 items-center justify-center text-[var(--lga-ink)] md:hidden"
+            >
+              {isOpen ? (
+                <X className="h-6 w-6 cursor-pointer" strokeWidth={1.5} />
+              ) : (
+                <Menu className="h-6 w-6 cursor-pointer" strokeWidth={3} />
+              )}
+            </button>
+          </div>
 
           <nav className="hidden md:block">
             <ul className="flex items-center gap-12">
@@ -66,21 +80,6 @@ export default function Header() {
               ))}
             </ul>
           </nav>
-
-          <button
-            type="button"
-            aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-            aria-expanded={isOpen}
-            aria-controls="mobile-sidebar"
-            onClick={() => setIsOpen((v) => !v)}
-            className="relative z-[60] inline-flex h-10 w-10 items-center justify-center text-[var(--lga-ink)] md:hidden"
-          >
-            {isOpen ? (
-              <X className="h-6 w-6 cursor-pointer" strokeWidth={1.5} />
-            ) : (
-              <Plus className="h-6 w-6 cursor-pointer" strokeWidth={3} />
-            )}
-          </button>
         </div>
       </header>
 
