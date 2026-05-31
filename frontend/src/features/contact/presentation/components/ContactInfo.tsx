@@ -1,6 +1,32 @@
-import { Share2 } from 'lucide-react';
+import { Check, Share2 } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ContactInfo() {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    const shareData = {
+      title: document.title,
+      text: 'nous contacter — atelier lorenzo garvin',
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      await navigator.clipboard.writeText(shareData.url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      // L'utilisateur a annulé le partage natif : on ignore silencieusement.
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+      console.error('Le partage a échoué :', error);
+    }
+  };
+
   return (
     <div className="flex max-w-[450px] flex-col gap-5">
       <h2
@@ -47,10 +73,15 @@ export default function ContactInfo() {
       <div className="pt-4">
         <button
           type="button"
-          aria-label="Partager"
+          onClick={handleShare}
+          aria-label={copied ? 'Lien copié' : 'Partager'}
           className="inline-flex h-9 w-9 items-center justify-center text-[var(--lga-muted)] transition-colors hover:text-[var(--lga-ink)]"
         >
-          <Share2 className="h-6 w-6" strokeWidth={1.5} />
+          {copied ? (
+            <Check className="h-6 w-6" strokeWidth={1.5} />
+          ) : (
+            <Share2 className="h-6 w-6" strokeWidth={1.5} />
+          )}
         </button>
       </div>
     </div>
