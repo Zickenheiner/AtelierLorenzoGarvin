@@ -41,6 +41,7 @@ services:
       dockerfile: Dockerfile.prod
       args:
         VITE_API_URL: ${VITE_API_URL}
+        VITE_WEB3FORMS_KEY: ${VITE_WEB3FORMS_KEY}
     restart: unless-stopped
     networks:
       - app

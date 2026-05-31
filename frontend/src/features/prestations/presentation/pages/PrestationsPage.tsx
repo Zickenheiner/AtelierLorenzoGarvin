@@ -25,7 +25,7 @@ Travailler main dans la main avec nos partenaires, c’est offrir à nos clients
 export default function PrestationsPage() {
   return (
     <div>
-      <div className="flex flex-col px-8 py-24 gap-16">
+      <div className="flex flex-col px-8 py-20 md:py-24 gap-16">
         <ServiceSection
           number="01"
           eyebrow="Concept"

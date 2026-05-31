@@ -1,7 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { cn } from '@/core/utils/cn';
+
+const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY;
 
 const schema = z.object({
   prenom: z.string().min(1, 'Champ requis'),
@@ -41,9 +45,53 @@ export default function ContactForm() {
   });
 
   const onSubmit = async (values: FormValues) => {
-    // TODO: brancher l'API contact quand le backend sera disponible
-    console.log('contact form submitted', values);
-    reset();
+    if (!WEB3FORMS_KEY) {
+      console.error(
+        'VITE_WEB3FORMS_KEY est manquante : impossible d’envoyer le message.',
+      );
+      toast.error(
+        'Configuration manquante, le message n’a pas pu être envoyé.',
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch(WEB3FORMS_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Nouveau message du site — ${values.prenom} ${values.nom}`,
+          from_name: `${values.prenom} ${values.nom}`,
+          replyto: values.email,
+          Prénom: values.prenom,
+          Nom: values.nom,
+          Email: values.email,
+          Téléphone: values.telephone,
+          'Code postal du projet': values.codePostal,
+          'Descriptif du projet': values.description,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message ?? 'Échec de l’envoi');
+      }
+
+      toast.success(
+        'Votre message a bien été envoyé. Nous vous répondrons rapidement.',
+      );
+      reset();
+    } catch (error) {
+      console.error('Envoi du formulaire de contact échoué :', error);
+      toast.error(
+        'Une erreur est survenue lors de l’envoi. Merci de réessayer ou de nous écrire à jj@lorenzogarvin.eu.',
+      );
+    }
   };
 
   return (
@@ -102,7 +150,7 @@ export default function ContactForm() {
           className="inline-flex h-[37px] w-fit items-center justify-center self-start bg-black px-[30px] py-[10px] text-[11px] leading-[16.5px] tracking-[0.1em] text-[var(--lga-hero-text)] uppercase transition-opacity hover:opacity-80 disabled:opacity-50"
           style={{ fontFamily: 'var(--font-body)', fontWeight: 400 }}
         >
-          envoyer message
+          {isSubmitting ? 'envoi…' : 'envoyer message'}
         </button>
       </div>
     </form>
