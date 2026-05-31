@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import { cn } from '@/core/utils/cn';
 
@@ -33,11 +33,7 @@ const FIELDS: Array<{
 const INPUT_BASE =
   'w-full bg-transparent border-0 border-b border-[#c6c6c6]/40 py-3 text-[18px] leading-7 tracking-[0.1em] text-[var(--lga-ink)] placeholder:text-[var(--lga-muted)] focus:border-[var(--lga-ink)] focus:outline-none transition-colors';
 
-type SubmitStatus = 'idle' | 'success' | 'error';
-
 export default function ContactForm() {
-  const [status, setStatus] = useState<SubmitStatus>('idle');
-
   const {
     register,
     handleSubmit,
@@ -49,13 +45,13 @@ export default function ContactForm() {
   });
 
   const onSubmit = async (values: FormValues) => {
-    setStatus('idle');
-
     if (!WEB3FORMS_KEY) {
       console.error(
         'VITE_WEB3FORMS_KEY est manquante : impossible d’envoyer le message.',
       );
-      setStatus('error');
+      toast.error(
+        'Configuration manquante, le message n’a pas pu être envoyé.',
+      );
       return;
     }
 
@@ -86,11 +82,15 @@ export default function ContactForm() {
         throw new Error(data.message ?? 'Échec de l’envoi');
       }
 
-      setStatus('success');
+      toast.success(
+        'Votre message a bien été envoyé. Nous vous répondrons rapidement.',
+      );
       reset();
     } catch (error) {
       console.error('Envoi du formulaire de contact échoué :', error);
-      setStatus('error');
+      toast.error(
+        'Une erreur est survenue lors de l’envoi. Merci de réessayer ou de nous écrire à jj@lorenzogarvin.eu.',
+      );
     }
   };
 
@@ -152,27 +152,6 @@ export default function ContactForm() {
         >
           {isSubmitting ? 'envoi…' : 'envoyer message'}
         </button>
-
-        {status === 'success' ? (
-          <p
-            className="text-[14px] leading-6 text-green-600"
-            style={{ fontFamily: 'var(--font-body)' }}
-            role="status"
-          >
-            Merci, votre message a bien été envoyé. Nous vous répondrons
-            rapidement.
-          </p>
-        ) : null}
-        {status === 'error' ? (
-          <p
-            className="text-[14px] leading-6 text-red-500"
-            style={{ fontFamily: 'var(--font-body)' }}
-            role="alert"
-          >
-            Une erreur est survenue lors de l’envoi. Merci de réessayer ou de
-            nous écrire à jj@lorenzogarvin.eu.
-          </p>
-        ) : null}
       </div>
     </form>
   );
