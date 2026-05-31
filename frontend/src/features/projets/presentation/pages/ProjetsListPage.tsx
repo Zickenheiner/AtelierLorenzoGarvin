@@ -11,7 +11,7 @@ export default function ProjetsListPage() {
   const { data: projets, isLoading, error } = useProjets();
 
   return (
-    <main className="w-full bg-[var(--lga-bg)] px-6 py-16 sm:px-8 sm:py-20 lg:py-24">
+    <main className="w-full bg-[var(--lga-bg)] px-6 sm:px-8 py-20 md:py-24">
       <Container size="xl">
         <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
           <header className="flex flex-col gap-4 lg:max-w-[720px]">

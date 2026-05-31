@@ -15,7 +15,7 @@ const headingVariants = cva(
         default: '',
         hero: 'text-[40px] leading-[1.05] tracking-[-0.03em] sm:text-[52px] lg:text-[64px]',
         display:
-          'text-[44px] leading-[1.05] uppercase sm:text-[56px] font-normal',
+          'text-[36px] sm:text-[44px] leading-[1.05] uppercase md:text-[56px] font-normal',
       },
     },
     defaultVariants: {
