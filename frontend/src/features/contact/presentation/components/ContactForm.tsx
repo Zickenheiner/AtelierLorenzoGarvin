@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -34,6 +35,9 @@ const INPUT_BASE =
   'w-full bg-transparent border-0 border-b border-[#c6c6c6]/40 py-3 text-[18px] leading-7 tracking-[0.1em] text-[var(--lga-ink)] placeholder:text-[var(--lga-muted)] focus:border-[var(--lga-ink)] focus:outline-none transition-colors';
 
 export default function ContactForm() {
+  // Honeypot anti-spam : champ piège invisible. Rempli uniquement par les bots.
+  const honeypotRef = useRef<HTMLInputElement>(null);
+
   const {
     register,
     handleSubmit,
@@ -45,6 +49,12 @@ export default function ContactForm() {
   });
 
   const onSubmit = async (values: FormValues) => {
+    // Court-circuit : si le honeypot est rempli, c'est un bot → on simule un succès.
+    if (honeypotRef.current?.checked) {
+      reset();
+      return;
+    }
+
     if (!WEB3FORMS_KEY) {
       console.error(
         'VITE_WEB3FORMS_KEY est manquante : impossible d’envoyer le message.',
@@ -64,6 +74,7 @@ export default function ContactForm() {
         },
         body: JSON.stringify({
           access_key: WEB3FORMS_KEY,
+          botcheck: honeypotRef.current?.checked ?? false,
           subject: `Nouveau message du site — ${values.prenom} ${values.nom}`,
           from_name: `${values.prenom} ${values.nom}`,
           replyto: values.email,
@@ -101,6 +112,18 @@ export default function ContactForm() {
       className="rounded-sm bg-white p-5 shadow-[0_4px_24px_rgba(0,0,0,0.06)]"
     >
       <div className="flex flex-col gap-4">
+        {/* Honeypot anti-spam : masqué aux humains et aux lecteurs d'écran, hors tabulation. */}
+        <input
+          ref={honeypotRef}
+          type="checkbox"
+          name="botcheck"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="hidden"
+          style={{ display: 'none' }}
+        />
+
         {FIELDS.map((field) => (
           <div key={field.name} className="flex flex-col">
             <input
