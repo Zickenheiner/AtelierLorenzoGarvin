@@ -132,6 +132,8 @@ export default defineConfig(({ mode }) => {
         renderedPaths = [...staticPaths, ...projetPaths];
         return renderedPaths;
       },
+      onPageRendered: (_route, renderedHTML) =>
+        renderedHTML.replace(/ data-server-rendered="true"/g, ''),
       onFinished: async (dir) => {
         await writeSeoFiles(dir, renderedPaths, siteUrl);
         await writeSpaFallback(dir);
