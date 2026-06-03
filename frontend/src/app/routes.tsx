@@ -7,21 +7,25 @@ import {
   PROJETS_QUERY_KEY,
   projetQueryKey,
 } from '@/features/projets/domain/hooks/projet.hook';
+import AccueilPage from '@/features/accueil/presentation/pages/AccueilPage';
+import PrestationsPage from '@/features/prestations/presentation/pages/PrestationsPage';
+import ContactPage from '@/features/contact/presentation/pages/ContactPage';
+import ProjetsListPage from '@/features/projets/presentation/pages/ProjetsListPage';
+import ProjetPage from '@/features/projets/presentation/pages/ProjetPage';
+import AdminLoginPage from '@/features/admin/presentation/pages/AdminLoginPage';
+import AdminProjetListPage from '@/features/admin/presentation/pages/AdminProjetListPage';
+import AdminProjetCreatePage from '@/features/admin/presentation/pages/AdminProjetCreatePage';
+import AdminProjetEditPage from '@/features/admin/presentation/pages/AdminProjetEditPage';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClientProvider,
   type DehydratedState,
 } from '@tanstack/react-query';
-import type { ComponentType } from 'react';
 import { Outlet, useLoaderData } from 'react-router-dom';
 import type { RouteRecord } from 'vite-react-ssg';
 import Layout from './Layout';
 import Private from './Private';
-
-function page(factory: () => Promise<{ default: ComponentType }>) {
-  return () => factory().then((module) => ({ Component: module.default }));
-}
 
 let projetsCache: ProjetEntity[] | null = null;
 
@@ -68,71 +72,22 @@ export const ssgRoutes: RouteRecord[] = [
       {
         element: <Layout />,
         children: [
-          {
-            index: true,
-            lazy: page(
-              () => import('@/features/accueil/presentation/pages/AccueilPage'),
-            ),
-          },
-          {
-            path: 'prestations',
-            lazy: page(
-              () =>
-                import('@/features/prestations/presentation/pages/PrestationsPage'),
-            ),
-          },
-          {
-            path: 'contact',
-            lazy: page(
-              () => import('@/features/contact/presentation/pages/ContactPage'),
-            ),
-          },
-          {
-            path: 'projets',
-            lazy: page(
-              () =>
-                import('@/features/projets/presentation/pages/ProjetsListPage'),
-            ),
-          },
-          {
-            path: 'projets/:slug',
-            lazy: page(
-              () => import('@/features/projets/presentation/pages/ProjetPage'),
-            ),
-          },
+          { index: true, element: <AccueilPage /> },
+          { path: 'prestations', element: <PrestationsPage /> },
+          { path: 'contact', element: <ContactPage /> },
+          { path: 'projets', element: <ProjetsListPage /> },
+          { path: 'projets/:slug', element: <ProjetPage /> },
         ],
       },
-
-      {
-        path: 'admin/login',
-        lazy: page(
-          () => import('@/features/admin/presentation/pages/AdminLoginPage'),
-        ),
-      },
-
+      { path: 'admin/login', element: <AdminLoginPage /> },
       {
         element: <Private redirect={routes.adminLogin} />,
         children: [
-          {
-            path: 'admin',
-            lazy: page(
-              () =>
-                import('@/features/admin/presentation/pages/AdminProjetListPage'),
-            ),
-          },
-          {
-            path: 'admin/projets/nouveau',
-            lazy: page(
-              () =>
-                import('@/features/admin/presentation/pages/AdminProjetCreatePage'),
-            ),
-          },
+          { path: 'admin', element: <AdminProjetListPage /> },
+          { path: 'admin/projets/nouveau', element: <AdminProjetCreatePage /> },
           {
             path: 'admin/projets/:id/modifier',
-            lazy: page(
-              () =>
-                import('@/features/admin/presentation/pages/AdminProjetEditPage'),
-            ),
+            element: <AdminProjetEditPage />,
           },
         ],
       },
