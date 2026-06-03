@@ -5,22 +5,30 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-// Coquille SPA neutre pour le fallback des routes NON pré-rendues (ex. /admin).
-// Sans elle, nginx servirait `index.html` (= accueil pré-rendu) en fallback, et
-// React monterait la vraie page par-dessus l'accueil → double affichage.
-// On part de index.html (bons liens JS/CSS) puis on vide le conteneur racine et
-// on retire l'état d'hydratation propre à l'accueil.
 async function writeSpaFallback(outDir: string): Promise<void> {
-  let html = await readFile(join(outDir, 'index.html'), 'utf-8');
-  html = html.replace(
-    /(<div id="root")[^>]*>[\s\S]*?<\/div>(\s*)(?=<script)/,
-    '$1></div>$2',
-  );
-  html = html.replace(
-    /<script>\s*window\.__staticRouterHydrationData[\s\S]*?<\/script>/,
-    '',
-  );
-  await writeFile(join(outDir, '200.html'), html, 'utf-8');
+  const html = await readFile(join(outDir, 'index.html'), 'utf-8');
+
+  const hashMarker = '<script>window.__VITE_REACT_SSG_HASH__';
+  const start = html.indexOf('<div id="root"');
+  const hashPos = html.indexOf(hashMarker);
+
+  let shell: string;
+  if (start !== -1 && hashPos !== -1) {
+    const closeRoot = html.lastIndexOf('</div>', hashPos);
+    shell =
+      html.slice(0, start) +
+      '<div id="root"></div>' +
+      html.slice(closeRoot + '</div>'.length);
+  } else {
+    shell = html
+      .replace(/(<div id="root")[^>]*>[\s\S]*?<\/div>/, '$1></div>')
+      .replace(
+        /<script>window\.__staticRouterHydrationData[\s\S]*?<\/script>/,
+        '',
+      );
+  }
+
+  await writeFile(join(outDir, '200.html'), shell, 'utf-8');
 }
 
 function normalizePath(path: string): string {
