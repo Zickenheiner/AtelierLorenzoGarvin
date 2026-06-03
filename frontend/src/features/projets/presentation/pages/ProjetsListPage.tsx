@@ -1,3 +1,4 @@
+import Seo from '@/core/components/Seo';
 import { Container } from '@/core/components/ui/container';
 import { ErrorAlert } from '@/core/components/ui/error-alert';
 import { Heading } from '@/core/components/ui/heading';
@@ -12,6 +13,11 @@ export default function ProjetsListPage() {
 
   return (
     <main className="w-full bg-[var(--lga-bg)] px-6 sm:px-8 py-20 md:py-24">
+      <Seo
+        title="Projets"
+        description="Une sélection d'œuvres et d'aménagements réalisés par l'atelier. Chaque projet raconte une matière, une géométrie, une lumière."
+        path="/projets"
+      />
       <Container size="xl">
         <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
           <header className="flex flex-col gap-4 lg:max-w-[720px]">
@@ -45,11 +51,12 @@ export default function ProjetsListPage() {
                 <Link
                   key={projet.id}
                   to={routes.projets(projet.slug)}
-                  className="group relative block aspect-[4/5] overflow-hidden bg-[var(--lga-surface)]"
+                  className="group relative block aspect-square overflow-hidden bg-[var(--lga-surface)]"
                 >
                   <img
                     src={toAssetUrl(projet.hero.img)}
                     alt={projet.hero.alt || projet.title}
+                    loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

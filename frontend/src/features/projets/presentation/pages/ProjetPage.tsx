@@ -1,3 +1,5 @@
+import Seo from '@/core/components/Seo';
+import { toAssetUrl } from '@/core/utils/asset-url';
 import { useParams } from 'react-router-dom';
 import { useProjet } from '../../domain/hooks/projet.hook';
 import ProjetDrawings from '../components/ProjetDrawings';
@@ -30,6 +32,13 @@ export default function ProjetPage() {
 
   return (
     <div className="flex flex-col gap-16 sm:gap-20 lg:gap-24 pb-16 sm:pb-20 lg:pb-24">
+      <Seo
+        title={projet.title}
+        description={projet.resume}
+        path={`/projets/${projet.slug}`}
+        image={toAssetUrl(projet.hero?.img)}
+        type="article"
+      />
       <ProjetHero projet={projet} />
       <ProjetNarrative projet={projet} />
       <ProjetDrawings projet={projet} />

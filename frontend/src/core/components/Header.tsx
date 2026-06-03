@@ -36,6 +36,9 @@ export default function Header() {
             <img
               src="https://www.lorenzogarvin.eu/assets/lgalogo100x100.png"
               alt="LGA"
+              width={50}
+              height={50}
+              loading="eager"
               className="h-[50px] w-[50px] object-contain"
             />
             <span
