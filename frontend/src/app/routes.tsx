@@ -63,11 +63,16 @@ function Root() {
   );
 }
 
+function RootHydrateFallback() {
+  return null;
+}
+
 export const ssgRoutes: RouteRecord[] = [
   {
     path: routes.home,
     element: <Root />,
     loader: rootLoader,
+    HydrateFallback: RootHydrateFallback,
     children: [
       {
         element: <Layout />,

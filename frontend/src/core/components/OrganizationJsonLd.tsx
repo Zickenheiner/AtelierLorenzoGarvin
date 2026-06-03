@@ -1,8 +1,5 @@
+import { SITE_URL } from '@/core/utils/site-url';
 import { Head } from 'vite-react-ssg';
-
-const SITE_URL = (
-  (import.meta.env.VITE_SITE_URL as string | undefined) ?? ''
-).replace(/\/+$/, '');
 
 export default function OrganizationJsonLd() {
   const data: Record<string, unknown> = {
