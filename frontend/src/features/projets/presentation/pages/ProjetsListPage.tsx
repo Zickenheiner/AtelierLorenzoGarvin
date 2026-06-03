@@ -1,4 +1,5 @@
 import Seo from '@/core/components/Seo';
+import seo from '@/core/constants/seo';
 import { Container } from '@/core/components/ui/container';
 import { ErrorAlert } from '@/core/components/ui/error-alert';
 import { Heading } from '@/core/components/ui/heading';
@@ -14,9 +15,9 @@ export default function ProjetsListPage() {
   return (
     <main className="w-full bg-[var(--lga-bg)] px-6 sm:px-8 py-20 md:py-24">
       <Seo
-        title="Projets"
-        description="Une sélection d'œuvres et d'aménagements réalisés par l'atelier. Chaque projet raconte une matière, une géométrie, une lumière."
-        path="/projets"
+        title={seo.projets.title}
+        description={seo.projets.description}
+        path={seo.projets.path}
       />
       <Container size="xl">
         <div className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
