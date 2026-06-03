@@ -45,7 +45,7 @@ export default function ProjetsListPage() {
                 <Link
                   key={projet.id}
                   to={routes.projets(projet.slug)}
-                  className="group relative block aspect-[4/5] overflow-hidden bg-[var(--lga-surface)]"
+                  className="group relative block aspect-square overflow-hidden bg-[var(--lga-surface)]"
                 >
                   <img
                     src={toAssetUrl(projet.hero.img)}
