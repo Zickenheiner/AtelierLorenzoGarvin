@@ -53,6 +53,12 @@ deploy:
 	git pull
 	$(PROD) up --build -d
 
+# Régénère le frontend (pré-rendu SSG + sitemap) en re-récupérant les projets
+# depuis l'API. --no-cache force le re-pré-rendu. Destiné au cron quotidien.
+rebuild-front:
+	$(PROD) build --no-cache frontend
+	$(PROD) up -d frontend
+
 # ─── DB ───────────────────────────────────────────────────────────────────────
 
 mongo-sh:
@@ -70,5 +76,5 @@ setup:
 	@sh setup.prod.sh
 
 .PHONY: dev-up dev-compass dev-down dev-restart dev-logs dev-sh-% \
-        up down restart logs logs-% sh-% deploy \
-        mongo-sh mongo-sh-dev dev-setup
+        up down restart logs logs-% sh-% deploy rebuild-front \
+        mongo-sh mongo-sh-dev dev-setup setup
