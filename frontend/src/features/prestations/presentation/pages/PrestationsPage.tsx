@@ -1,4 +1,5 @@
 import Seo from '@/core/components/Seo';
+import seo from '@/core/constants/seo';
 import ContexteSection from '../components/ContexteSection';
 import CtaSection from '../components/CtaSection';
 import ServiceSection from '../components/ServiceSection';
@@ -27,10 +28,10 @@ export default function PrestationsPage() {
   return (
     <div>
       <Seo
-        title="Prestations"
-        description="Conception & design, maîtrise d'œuvre et architecture d'intérieur. Plus de 14 ans d'expérience pour vous accompagner de la conception au suivi complet du chantier."
-        path="/prestations"
-        image="/images/prestation-service-01-conception.webp"
+        title={seo.prestations.title}
+        description={seo.prestations.description}
+        path={seo.prestations.path}
+        image={seo.prestations.image}
       />
       <div className="flex flex-col px-8 py-20 md:py-24 gap-16">
         <ServiceSection
