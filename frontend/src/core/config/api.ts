@@ -83,7 +83,9 @@ const request = async <T = unknown>(config: Config): Promise<T> => {
 
     if (!newToken) {
       clearTokens();
-      window.location.href = '/admin/login';
+      if (typeof window !== 'undefined') {
+        window.location.href = '/admin/login';
+      }
       throw new ApiError('Session expirée', 401);
     }
 

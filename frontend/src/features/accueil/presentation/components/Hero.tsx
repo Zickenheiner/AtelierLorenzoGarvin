@@ -5,8 +5,12 @@ export default function Hero() {
       className="relative h-screen w-full overflow-hidden"
     >
       <img
-        src="/images/hero-blackpatio.png"
+        src="/images/hero-blackpatio.webp"
         alt="Patio architectural — atelier LGA"
+        width={1920}
+        height={1281}
+        loading="eager"
+        fetchPriority="high"
         className="absolute inset-0 h-screen w-full object-cover"
       />
       <div className="pointer-events-none absolute inset-0 bg-[var(--lga-hero-tint)]/30 mix-blend-multiply" />

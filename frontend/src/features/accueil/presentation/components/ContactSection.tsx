@@ -6,6 +6,7 @@ export default function ContactSection() {
           <img
             src="https://www.lorenzogarvin.eu/assets/lgalogo.png"
             alt="LGA — Lorenzo Garvin"
+            loading="lazy"
             className="my-2 h-70 w-auto object-contain"
           />
         </div>

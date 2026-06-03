@@ -47,6 +47,7 @@ export default function ProjetGallery({ projet }: Props) {
                 <img
                   src={toAssetUrl(item.img)}
                   alt={item.alt}
+                  loading="lazy"
                   className="block h-auto w-full object-cover sm:aspect-[384/300]"
                 />
               </button>

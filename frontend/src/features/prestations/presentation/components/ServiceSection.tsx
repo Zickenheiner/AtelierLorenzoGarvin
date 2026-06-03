@@ -7,6 +7,8 @@ interface Props {
   body: string;
   image: string;
   imageAlt: string;
+  imageWidth: number;
+  imageHeight: number;
   reverse?: boolean;
 }
 
@@ -17,6 +19,8 @@ export default function ServiceSection({
   body,
   image,
   imageAlt,
+  imageWidth,
+  imageHeight,
   reverse,
 }: Props) {
   return (
@@ -57,6 +61,9 @@ export default function ServiceSection({
           <img
             src={image}
             alt={imageAlt}
+            width={imageWidth}
+            height={imageHeight}
+            loading="lazy"
             className="h-full w-full object-cover"
           />
         </div>

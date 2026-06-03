@@ -1,10 +1,8 @@
 import './index.css';
-import { createRoot } from 'react-dom/client';
-import Router from './app/Router';
-import Provider from './app/Provider';
+import { ViteReactSSG } from 'vite-react-ssg';
+import { ssgRoutes } from './app/routes';
 
-createRoot(document.getElementById('root')!).render(
-  <Provider>
-    <Router />
-  </Provider>,
-);
+export const createRoot = ViteReactSSG({
+  routes: ssgRoutes,
+  basename: import.meta.env.BASE_URL,
+});

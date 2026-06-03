@@ -1,3 +1,4 @@
+import Seo from '@/core/components/Seo';
 import ContexteSection from '../components/ContexteSection';
 import CtaSection from '../components/CtaSection';
 import ServiceSection from '../components/ServiceSection';
@@ -25,22 +26,32 @@ Travailler main dans la main avec nos partenaires, c’est offrir à nos clients
 export default function PrestationsPage() {
   return (
     <div>
+      <Seo
+        title="Prestations"
+        description="Conception & design, maîtrise d'œuvre et architecture d'intérieur. Plus de 14 ans d'expérience pour vous accompagner de la conception au suivi complet du chantier."
+        path="/prestations"
+        image="/images/prestation-service-01-conception.webp"
+      />
       <div className="flex flex-col px-8 py-20 md:py-24 gap-16">
         <ServiceSection
           number="01"
           eyebrow="Concept"
           title="Conception & Design"
           body={SERVICE_01}
-          image="/images/prestation-service-01-conception.png"
+          image="/images/prestation-service-01-conception.webp"
           imageAlt="Dessin architectural — Conception et design"
+          imageWidth={512}
+          imageHeight={512}
         />
         <ServiceSection
           number="02"
           eyebrow="Exécution"
           title="Maîtrise d'Œuvre"
           body={SERVICE_02}
-          image="/images/prestation-service-02-maitrise.png"
+          image="/images/prestation-service-02-maitrise.webp"
           imageAlt="Chantier — Maîtrise d'œuvre"
+          imageWidth={1500}
+          imageHeight={1000}
           reverse
         />
         <ServiceSection
@@ -48,8 +59,10 @@ export default function PrestationsPage() {
           eyebrow="Intimité"
           title="Architecture d'Intérieur"
           body={SERVICE_03}
-          image="/images/prestation-service-03-interieur.png"
+          image="/images/prestation-service-03-interieur.webp"
           imageAlt="Dessin architectural — Architecture d'intérieur"
+          imageWidth={1333}
+          imageHeight={2000}
         />
         <ContexteSection />
       </div>
