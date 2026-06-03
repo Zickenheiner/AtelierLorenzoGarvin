@@ -1,10 +1,7 @@
+import { SITE_URL } from '@/core/utils/site-url';
 import { Head } from 'vite-react-ssg';
 
 const SITE_NAME = "Atelier d'architecture LGA — Lorenzo Garvin";
-
-const SITE_URL = (
-  (import.meta.env.VITE_SITE_URL as string | undefined) ?? ''
-).replace(/\/+$/, '');
 
 interface SeoProps {
   title: string;

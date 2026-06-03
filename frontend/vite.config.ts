@@ -36,6 +36,14 @@ function normalizePath(path: string): string {
   return path.startsWith('/') ? path : `/${path}`;
 }
 
+function normalizeSiteUrl(raw: string | undefined | null): string {
+  let url = (raw ?? '').trim().replace(/\/+$/, '');
+  if (!url) return '';
+  if (url.startsWith('://')) url = `https${url}`;
+  else if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
+  return url;
+}
+
 async function writeSeoFiles(
   outDir: string,
   paths: string[],
@@ -89,7 +97,9 @@ async function fetchProjetPaths(apiUrl?: string): Promise<string[]> {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const siteUrl = env.VITE_SITE_URL || process.env.VITE_SITE_URL || '';
+  const siteUrl = normalizeSiteUrl(
+    env.VITE_SITE_URL || process.env.VITE_SITE_URL,
+  );
 
   let renderedPaths: string[] = [];
 
