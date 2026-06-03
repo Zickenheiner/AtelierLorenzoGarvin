@@ -9,3 +9,4 @@ files.sh
 docker-compose.dev.yml
 Dockerfile.dev
 setup.dev.sh
+.playwright-mcp
