@@ -8,8 +8,9 @@ import type { ProjetEntity } from '../entities/projet.entity';
 
 const projetRepository = new ProjetRepositoryImpl();
 
-const PROJETS_QUERY_KEY = ['projets'] as const;
-const projetQueryKey = (slug: string | undefined) => ['projet', slug] as const;
+export const PROJETS_QUERY_KEY = ['projets'] as const;
+export const projetQueryKey = (slug: string | undefined) =>
+  ['projet', slug] as const;
 const projetByIdQueryKey = (id: string | undefined) =>
   ['projet', 'id', id] as const;
 

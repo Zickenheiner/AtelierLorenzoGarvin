@@ -12,6 +12,8 @@ export default function ProjetHero({ projet }: Props) {
       <img
         src={toAssetUrl(projet.hero.img)}
         alt={projet.hero.alt || projet.title}
+        loading="eager"
+        fetchPriority="high"
         className="absolute inset-0 h-full w-full object-cover"
       />
       <div className="pointer-events-none absolute inset-0 bg-[var(--lga-hero-tint)]/30 mix-blend-multiply" />

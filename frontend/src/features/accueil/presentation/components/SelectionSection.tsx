@@ -48,6 +48,7 @@ export default function SelectionSection() {
                     <img
                       src={toAssetUrl(projet.hero.img)}
                       alt={projet.hero.alt || projet.title}
+                      loading="lazy"
                       className="block h-auto w-full object-cover lg:h-[531px]"
                     />
                   </div>

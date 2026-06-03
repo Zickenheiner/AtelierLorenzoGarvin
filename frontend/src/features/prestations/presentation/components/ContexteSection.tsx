@@ -76,18 +76,27 @@ export default function ContexteSection() {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <img
-            src="/images/prestation-urban-landscape.png"
+            src="/images/prestation-urban-landscape.webp"
             alt="Paysage urbain"
+            width={800}
+            height={533}
+            loading="lazy"
             className="h-[400px] w-full object-cover"
           />
           <img
-            src="/images/prestation-environment.png"
+            src="/images/prestation-environment.webp"
             alt="Environnement naturel"
+            width={800}
+            height={800}
+            loading="lazy"
             className="h-[400px] w-full object-cover"
           />
           <img
-            src="/images/prestation-mountain-context.png"
+            src="/images/prestation-mountain-context.webp"
             alt="Contexte montagne"
+            width={400}
+            height={300}
+            loading="lazy"
             className="h-[400px] w-full object-cover"
           />
         </div>
