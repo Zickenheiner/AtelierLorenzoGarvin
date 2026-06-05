@@ -33,7 +33,7 @@ export default function ProjetDrawings({ projet }: Props) {
           </header>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-2">
-            {projet.drawings.map((d, idx) => (
+            {projet.drawings.map((item, idx) => (
               <button
                 type="button"
                 onClick={() => {
@@ -41,11 +41,11 @@ export default function ProjetDrawings({ projet }: Props) {
                   setOpen(true);
                 }}
                 className="cursor-zoom-in"
-                aria-label={`Agrandir ${d.alt}`}
+                aria-label={`Agrandir ${item.alt}`}
               >
                 <img
-                  src={toAssetUrl(d.img)}
-                  alt={d.alt}
+                  src={toAssetUrl(item.img)}
+                  alt={item.alt}
                   loading="lazy"
                   className="h-auto w-full object-contain lg:aspect-[602/590]"
                 />
