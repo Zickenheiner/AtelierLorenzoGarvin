@@ -32,6 +32,15 @@ export class DrawingDto {
   img: string;
 
   @ApiProperty({
+    example: '/uploads/commode-plan-1-source.png',
+    description: "URL/chemin de l'image d'origine non recadrée",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  imgSource?: string;
+
+  @ApiProperty({
     example: 'Plan technique vue de face',
     description: 'Texte alternatif (accessibilité)',
   })
@@ -50,6 +59,15 @@ export class GalleryItemDto {
   img: string;
 
   @ApiProperty({
+    example: '/uploads/commode-1-source.jpg',
+    description: "URL/chemin de l'image d'origine non recadrée",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  imgSource?: string;
+
+  @ApiProperty({
     example: 'Vue de face de la commode',
     description: 'Texte alternatif (accessibilité)',
   })
@@ -66,6 +84,33 @@ export class HeroDto {
   @IsString()
   @IsNotEmpty()
   img: string;
+
+  @ApiProperty({
+    example: '/uploads/commode-hero-source.jpg',
+    description: "URL/chemin de l'image d'origine non recadrée",
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  imgSource?: string;
+
+  @ApiProperty({
+    example: '/uploads/commode-hero-carousel.jpg',
+    description: 'URL/chemin du recadrage carousel (3/2)',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  imgCarousel?: string;
+
+  @ApiProperty({
+    example: '/uploads/commode-hero-thumb.jpg',
+    description: 'URL/chemin du recadrage vignette (1/1)',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  imgThumbnail?: string;
 
   @ApiProperty({
     example: 'Commode en noyer massif — vue principale',

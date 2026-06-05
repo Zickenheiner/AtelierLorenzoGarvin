@@ -46,7 +46,9 @@ export default function SelectionSection() {
                 <article className="grid grid-cols-1 lg:grid-cols-[3fr_2fr]">
                   <div className="bg-white">
                     <img
-                      src={toAssetUrl(projet.hero.img)}
+                      src={toAssetUrl(
+                        projet.hero.imgCarousel || projet.hero.img,
+                      )}
                       alt={projet.hero.alt || projet.title}
                       loading="lazy"
                       className="block h-auto w-full object-cover lg:h-[531px]"

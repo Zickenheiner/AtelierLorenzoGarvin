@@ -19,6 +19,9 @@ export class Drawing {
   @Prop({ type: String, required: true })
   img: string;
 
+  @Prop({ type: String, required: false })
+  imgSource?: string;
+
   @Prop({ type: String, required: true })
   alt: string;
 }
@@ -30,6 +33,9 @@ export class GalleryItem {
   @Prop({ type: String, required: true })
   img: string;
 
+  @Prop({ type: String, required: false })
+  imgSource?: string;
+
   @Prop({ type: String, required: true })
   alt: string;
 }
@@ -40,6 +46,15 @@ export const GalleryItemSchema = SchemaFactory.createForClass(GalleryItem);
 export class Hero {
   @Prop({ type: String, required: true })
   img: string;
+
+  @Prop({ type: String, required: false })
+  imgSource?: string;
+
+  @Prop({ type: String, required: false })
+  imgCarousel?: string;
+
+  @Prop({ type: String, required: false })
+  imgThumbnail?: string;
 
   @Prop({ type: String, required: true })
   alt: string;

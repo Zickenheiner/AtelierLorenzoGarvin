@@ -51,7 +51,7 @@ export default function ProjetDrawings({ projet }: Props) {
                     src={toAssetUrl(d.img)}
                     alt={d.alt}
                     loading="lazy"
-                    className="h-auto w-full object-contain lg:aspect-[602/590]"
+                    className="aspect-square h-auto w-full object-cover"
                   />
                 </button>
                 <figcaption

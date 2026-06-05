@@ -55,7 +55,9 @@ export default function ProjetsListPage() {
                   className="group relative block aspect-square overflow-hidden bg-[var(--lga-surface)]"
                 >
                   <img
-                    src={toAssetUrl(projet.hero.img)}
+                    src={toAssetUrl(
+                      projet.hero.imgThumbnail || projet.hero.img,
+                    )}
                     alt={projet.hero.alt || projet.title}
                     loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

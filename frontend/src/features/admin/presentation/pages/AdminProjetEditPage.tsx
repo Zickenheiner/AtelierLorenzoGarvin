@@ -15,13 +15,28 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2 } from 'lucide-react';
 import { useEffect } from 'react';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
-import ImageUploadField from '../components/ImageUploadField';
+import ImageCropField from '../components/ImageCropField';
+import {
+  DRAWING_CROP_TABS,
+  GALLERY_CROP_TABS,
+  HERO_CROP_TABS,
+  type CropFieldTab,
+} from '../components/crop-tabs';
 
-const imageSchema = z.object({
-  img: z.string().min(1, 'URL requise'),
+const cropImageSchema = z.object({
+  img: z.string().min(1, 'Image requise'),
+  imgSource: z.string().optional(),
+  alt: z.string().min(1, 'Texte alternatif requis'),
+});
+
+const heroSchema = z.object({
+  img: z.string().min(1, 'Image requise'),
+  imgSource: z.string().optional(),
+  imgCarousel: z.string().optional(),
+  imgThumbnail: z.string().optional(),
   alt: z.string().min(1, 'Texte alternatif requis'),
 });
 
@@ -29,15 +44,15 @@ const schema = z.object({
   title: z.string().min(1, 'Titre requis'),
   resume: z.string().min(1, 'Résumé requis').max(200, '200 caractères maximum'),
   narrative: z.string().min(1, 'Narration requise'),
-  hero: imageSchema,
+  hero: heroSchema,
   spec: z.array(
     z.object({
       label: z.string().min(1, 'Libellé requis'),
       value: z.string().min(1, 'Valeur requise'),
     }),
   ),
-  drawings: z.array(imageSchema),
-  gallery: z.array(imageSchema),
+  drawings: z.array(cropImageSchema),
+  gallery: z.array(cropImageSchema),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -63,7 +78,13 @@ export default function AdminProjetEditPage() {
       title: '',
       resume: '',
       narrative: '',
-      hero: { img: '', alt: '' },
+      hero: {
+        img: '',
+        imgSource: '',
+        imgCarousel: '',
+        imgThumbnail: '',
+        alt: '',
+      },
       spec: [],
       drawings: [],
       gallery: [],
@@ -80,10 +101,24 @@ export default function AdminProjetEditPage() {
       title: projet.title,
       resume: projet.resume,
       narrative: projet.narrative,
-      hero: { img: projet.hero.img, alt: projet.hero.alt },
+      hero: {
+        img: projet.hero.img,
+        imgSource: projet.hero.imgSource ?? '',
+        imgCarousel: projet.hero.imgCarousel ?? '',
+        imgThumbnail: projet.hero.imgThumbnail ?? '',
+        alt: projet.hero.alt,
+      },
       spec: projet.spec,
-      drawings: projet.drawings,
-      gallery: projet.gallery,
+      drawings: projet.drawings.map((d) => ({
+        img: d.img,
+        imgSource: d.imgSource ?? '',
+        alt: d.alt,
+      })),
+      gallery: projet.gallery.map((g) => ({
+        img: g.img,
+        imgSource: g.imgSource ?? '',
+        alt: g.alt,
+      })),
     });
   }, [projet, reset]);
 
@@ -205,23 +240,13 @@ export default function AdminProjetEditPage() {
             <section className="flex flex-col gap-6">
               <SectionTitle>Image hero</SectionTitle>
 
-              <Field
-                label="Image"
-                htmlFor="hero.img"
+              <ImageCropField
+                control={control}
+                name="hero"
+                tabs={HERO_CROP_TABS}
+                invalid={!!errors.hero?.img}
                 error={errors.hero?.img?.message}
-              >
-                <Controller
-                  control={control}
-                  name="hero.img"
-                  render={({ field }) => (
-                    <ImageUploadField
-                      value={field.value}
-                      onChange={field.onChange}
-                      invalid={!!errors.hero?.img}
-                    />
-                  )}
-                />
-              </Field>
+              />
 
               <Field
                 label="Texte alternatif"
@@ -320,7 +345,9 @@ export default function AdminProjetEditPage() {
                   type="button"
                   variant="secondary"
                   size="xs"
-                  onClick={() => drawingsArray.append({ img: '', alt: '' })}
+                  onClick={() =>
+                    drawingsArray.append({ img: '', imgSource: '', alt: '' })
+                  }
                 >
                   <Plus className="h-3 w-3" strokeWidth={2} />
                   Ajouter un dessin
@@ -334,6 +361,7 @@ export default function AdminProjetEditPage() {
                 control={control}
                 register={register}
                 errors={errors.drawings}
+                tabs={DRAWING_CROP_TABS}
               />
             </section>
 
@@ -349,7 +377,9 @@ export default function AdminProjetEditPage() {
                   type="button"
                   variant="secondary"
                   size="xs"
-                  onClick={() => galleryArray.append({ img: '', alt: '' })}
+                  onClick={() =>
+                    galleryArray.append({ img: '', imgSource: '', alt: '' })
+                  }
                 >
                   <Plus className="h-3 w-3" strokeWidth={2} />
                   Ajouter une image
@@ -363,6 +393,7 @@ export default function AdminProjetEditPage() {
                 control={control}
                 register={register}
                 errors={errors.gallery}
+                tabs={GALLERY_CROP_TABS}
               />
             </section>
 
@@ -410,6 +441,7 @@ interface ImageArrayFieldsProps {
   control: ReturnType<typeof useForm<FormValues>>['control'];
   register: ReturnType<typeof useForm<FormValues>>['register'];
   errors: ImageArrayErrors;
+  tabs: CropFieldTab[];
 }
 
 function ImageArrayFields({
@@ -419,6 +451,7 @@ function ImageArrayFields({
   control,
   register,
   errors,
+  tabs,
 }: ImageArrayFieldsProps) {
   if (fields.length === 0) {
     return (
@@ -435,23 +468,13 @@ function ImageArrayFields({
           key={field.id}
           className="grid grid-cols-1 gap-3 sm:grid-cols-[280px_1fr_auto] sm:items-end"
         >
-          <Field
-            label="Image"
-            htmlFor={`${name}.${idx}.img`}
+          <ImageCropField
+            control={control}
+            name={`${name}.${idx}`}
+            tabs={tabs}
+            invalid={!!errors?.[idx]?.img}
             error={errors?.[idx]?.img?.message}
-          >
-            <Controller
-              control={control}
-              name={`${name}.${idx}.img` as const}
-              render={({ field: ctl }) => (
-                <ImageUploadField
-                  value={ctl.value}
-                  onChange={ctl.onChange}
-                  invalid={!!errors?.[idx]?.img}
-                />
-              )}
-            />
-          </Field>
+          />
           <Field
             label="Texte alternatif"
             htmlFor={`${name}.${idx}.alt`}

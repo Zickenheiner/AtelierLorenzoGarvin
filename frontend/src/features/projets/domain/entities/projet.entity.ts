@@ -5,16 +5,21 @@ export interface ProjetSpec {
 
 export interface ProjetDrawing {
   img: string;
+  imgSource?: string;
   alt: string;
 }
 
 export interface ProjetGalleryItem {
   img: string;
+  imgSource?: string;
   alt: string;
 }
 
 export interface ProjetHero {
   img: string;
+  imgSource?: string;
+  imgCarousel?: string;
+  imgThumbnail?: string;
   alt: string;
 }
 
