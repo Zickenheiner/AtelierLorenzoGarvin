@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-[var(--lga-footer)] py-5">
       <div className="mx-auto flex max-w-[1280px] flex-col items-center gap-2 px-8">
-        <div className="flex items-center gap-8">
+        {/* <div className="flex items-center gap-8">
           <a
             href="https://instagram.com"
             target="_blank"
@@ -21,7 +21,7 @@ export default function Footer() {
           >
             LinkedIn
           </a>
-        </div>
+        </div> */}
         <p
           className="text-center text-[10px] leading-[16.5px] tracking-[0.1em] text-[var(--lga-footer-ink)]"
           style={{ fontFamily: 'var(--font-body)', fontWeight: 400 }}
