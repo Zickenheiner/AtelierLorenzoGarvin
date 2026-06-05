@@ -16,6 +16,7 @@ export class ProjectMapper {
       doc.drawings,
       doc.gallery,
       doc.featured ?? false,
+      doc.order ?? 0,
     );
   }
 }

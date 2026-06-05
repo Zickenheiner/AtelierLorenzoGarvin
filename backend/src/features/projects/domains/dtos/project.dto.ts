@@ -3,10 +3,13 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
+  IsInt,
+  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
   MaxLength,
+  Min,
   ValidateNested,
 } from 'class-validator';
 
@@ -155,6 +158,28 @@ export class CreateProjectDto {
   @IsOptional()
   @IsBoolean()
   featured?: boolean;
+
+  @ApiProperty({
+    example: 0,
+    description: "Position d'affichage (laisser vide = ajouté en fin de liste)",
+    required: false,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  order?: number;
 }
 
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {}
+
+export class ReorderProjectsDto {
+  @ApiProperty({
+    type: [String],
+    example: ['68b4d59919d9b7a94b4fde21', '68b4d59919d9b7a94b4fde22'],
+    description: 'Liste des ids des projets dans le nouvel ordre souhaité',
+  })
+  @IsArray()
+  @IsNotEmpty()
+  @IsMongoId({ each: true })
+  ids: string[];
+}

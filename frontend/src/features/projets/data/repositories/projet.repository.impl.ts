@@ -36,4 +36,8 @@ export class ProjetRepositoryImpl implements ProjetRepository {
   delete(id: string): Promise<boolean> {
     return this.api.delete(id);
   }
+
+  reorder(ids: string[]): Promise<boolean> {
+    return this.api.reorder(ids);
+  }
 }

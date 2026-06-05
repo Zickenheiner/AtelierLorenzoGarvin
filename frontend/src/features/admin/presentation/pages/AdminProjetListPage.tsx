@@ -17,12 +17,29 @@ import { Switch } from '@/core/components/ui/switch';
 import routes from '@/core/constants/routes';
 import { toAssetUrl } from '@/core/utils/asset-url';
 import { useLogout, useMe } from '@/features/admin/domain/hooks/auth.hook';
+import { SortableProjetCard } from '@/features/admin/presentation/components/SortableProjetCard';
 import type { ProjetEntity } from '@/features/projets/domain/entities/projet.entity';
 import {
   useDeleteProjet,
   useProjets,
+  useReorderProjets,
   useUpdateProjet,
 } from '@/features/projets/domain/hooks/projet.hook';
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  rectSortingStrategy,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { Eye, LogOut, Pencil, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -33,6 +50,24 @@ export default function AdminProjetListPage() {
   const logout = useLogout();
   const { data: projets, isLoading, error } = useProjets();
   const deleteProjet = useDeleteProjet();
+  const reorderProjets = useReorderProjets();
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id || !projets) return;
+    const oldIndex = projets.findIndex((p) => p.id === active.id);
+    const newIndex = projets.findIndex((p) => p.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+    const next = arrayMove(projets, oldIndex, newIndex);
+    reorderProjets.mutate(next.map((p) => p.id));
+  };
+
   const [toDelete, setToDelete] = useState<ProjetEntity | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
@@ -89,6 +124,12 @@ export default function AdminProjetListPage() {
           </div>
         </header>
 
+        {reorderProjets.isError ? (
+          <ErrorAlert>
+            Échec du réordonnancement : {reorderProjets.error.message}
+          </ErrorAlert>
+        ) : null}
+
         {isLoading ? (
           <LoadingState />
         ) : error ? (
@@ -106,87 +147,102 @@ export default function AdminProjetListPage() {
             }
           />
         ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {projets.map((projet) => (
-              <Card
-                key={projet.id}
-                padding="none"
-                elevation="sm"
-                className="flex flex-col overflow-hidden"
-              >
-                <div className="relative aspect-[4/3] w-full bg-[var(--lga-surface)]">
-                  <img
-                    src={toAssetUrl(projet.hero.img)}
-                    alt={projet.hero.alt || projet.title}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                </div>
-
-                <div className="flex flex-1 flex-col gap-4 p-5">
-                  <div className="flex flex-col gap-1">
-                    <Heading as="h2" level="h3">
-                      {projet.title}
-                    </Heading>
-                    <p className="font-mono text-[11px] tracking-[0.05em] text-[var(--lga-muted)]">
-                      /{projet.slug}
-                    </p>
-                  </div>
-
-                  <p
-                    className="line-clamp-3 text-[13px] leading-[1.6] text-[var(--lga-muted)]"
-                    style={{ fontFamily: 'var(--font-body)' }}
-                  >
-                    {projet.resume}
-                  </p>
-
-                  <FeaturedToggle projet={projet} />
-
-                  <div className="mt-auto flex items-center gap-2 border-t border-[var(--lga-footer)] pt-4">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="xs"
-                      className="flex-1"
-                      title="Voir la page publique"
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={projets.map((p) => p.id)}
+              strategy={rectSortingStrategy}
+            >
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {projets.map((projet) => (
+                  <SortableProjetCard key={projet.id} id={projet.id}>
+                    <Card
+                      padding="none"
+                      elevation="sm"
+                      className="flex h-full flex-col overflow-hidden"
                     >
-                      <Link
-                        to={routes.projets(projet.slug)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
-                        Voir
-                      </Link>
-                    </Button>
-                    <Button
-                      asChild
-                      size="xs"
-                      className="flex-1"
-                      title="Modifier"
-                    >
-                      <Link to={routes.adminProjetEdit(projet.id)}>
-                        <Pencil className="h-3.5 w-3.5" strokeWidth={1.5} />
-                        Modifier
-                      </Link>
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon-sm"
-                      onClick={() => {
-                        setDeleteError(null);
-                        setToDelete(projet);
-                      }}
-                      title="Supprimer"
-                      className="hover:border-red-400 hover:text-red-500"
-                    >
-                      <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+                      <div className="relative aspect-[4/3] w-full bg-[var(--lga-surface)]">
+                        <img
+                          src={toAssetUrl(projet.hero.img)}
+                          alt={projet.hero.alt || projet.title}
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                      </div>
+
+                      <div className="flex flex-1 flex-col gap-4 p-5">
+                        <div className="flex flex-col gap-1">
+                          <Heading as="h2" level="h3">
+                            {projet.title}
+                          </Heading>
+                          <p className="font-mono text-[11px] tracking-[0.05em] text-[var(--lga-muted)]">
+                            /{projet.slug}
+                          </p>
+                        </div>
+
+                        <p
+                          className="line-clamp-3 text-[13px] leading-[1.6] text-[var(--lga-muted)]"
+                          style={{ fontFamily: 'var(--font-body)' }}
+                        >
+                          {projet.resume}
+                        </p>
+
+                        <FeaturedToggle projet={projet} />
+
+                        <div className="mt-auto flex items-center gap-2 border-t border-[var(--lga-footer)] pt-4">
+                          <Button
+                            asChild
+                            variant="ghost"
+                            size="xs"
+                            className="flex-1"
+                            title="Voir la page publique"
+                          >
+                            <Link
+                              to={routes.projets(projet.slug)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
+                              Voir
+                            </Link>
+                          </Button>
+                          <Button
+                            asChild
+                            size="xs"
+                            className="flex-1"
+                            title="Modifier"
+                          >
+                            <Link to={routes.adminProjetEdit(projet.id)}>
+                              <Pencil
+                                className="h-3.5 w-3.5"
+                                strokeWidth={1.5}
+                              />
+                              Modifier
+                            </Link>
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon-sm"
+                            onClick={() => {
+                              setDeleteError(null);
+                              setToDelete(projet);
+                            }}
+                            title="Supprimer"
+                            className="hover:border-red-400 hover:text-red-500"
+                          >
+                            <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
+                  </SortableProjetCard>
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         )}
       </Container>
 

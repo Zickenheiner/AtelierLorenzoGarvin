@@ -11,4 +11,5 @@ export interface IProjectService {
   create(dto: CreateProjectDto): Promise<boolean>;
   update(id: string, dto: UpdateProjectDto): Promise<boolean>;
   delete(id: string): Promise<boolean>;
+  reorder(ids: string[]): Promise<boolean>;
 }
