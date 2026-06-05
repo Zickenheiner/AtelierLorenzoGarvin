@@ -13,12 +13,12 @@ import { Plus, Trash2 } from 'lucide-react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
+import ImageArrayFields from '../components/ImageArrayFields';
 import ImageCropField from '../components/ImageCropField';
 import {
   DRAWING_CROP_TABS,
   GALLERY_CROP_TABS,
   HERO_CROP_TABS,
-  type CropFieldTab,
 } from '../components/crop-tabs';
 
 const cropImageSchema = z.object({
@@ -312,6 +312,7 @@ export default function AdminProjetCreatePage() {
                 errors={errors.drawings}
                 placeholderAlt="Entrer un texte alternatif décrivant l'image de la galerie"
                 tabs={DRAWING_CROP_TABS}
+                emptyLabel="Aucune entrée pour le moment."
               />
             </section>
 
@@ -345,6 +346,7 @@ export default function AdminProjetCreatePage() {
                 errors={errors.gallery}
                 placeholderAlt="Entrer un texte alternatif décrivant l'image de la galerie"
                 tabs={GALLERY_CROP_TABS}
+                emptyLabel="Aucune entrée pour le moment."
               />
             </section>
 
@@ -374,84 +376,5 @@ export default function AdminProjetCreatePage() {
         </Card>
       </div>
     </main>
-  );
-}
-
-type ImageArrayErrors =
-  | {
-      [idx: number]:
-        | { img?: { message?: string }; alt?: { message?: string } }
-        | undefined;
-    }
-  | undefined;
-
-interface ImageArrayFieldsProps {
-  fields: { id: string }[];
-  onRemove: (idx: number) => void;
-  name: 'drawings' | 'gallery';
-  control: ReturnType<typeof useForm<FormValues>>['control'];
-  register: ReturnType<typeof useForm<FormValues>>['register'];
-  errors: ImageArrayErrors;
-  placeholderAlt: string;
-  tabs: CropFieldTab[];
-}
-
-function ImageArrayFields({
-  fields,
-  onRemove,
-  name,
-  control,
-  register,
-  errors,
-  placeholderAlt,
-  tabs,
-}: ImageArrayFieldsProps) {
-  if (fields.length === 0) {
-    return (
-      <p className="text-[12px] text-[var(--lga-muted)] italic">
-        Aucune entrée pour le moment.
-      </p>
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-6">
-      {fields.map((field, idx) => (
-        <div
-          key={field.id}
-          className="grid grid-cols-1 gap-3 sm:grid-cols-[280px_1fr_auto] sm:items-end"
-        >
-          <ImageCropField
-            control={control}
-            name={`${name}.${idx}`}
-            tabs={tabs}
-            invalid={!!errors?.[idx]?.img}
-            error={errors?.[idx]?.img?.message}
-          />
-          <Field
-            label="Texte alternatif"
-            htmlFor={`${name}.${idx}.alt`}
-            error={errors?.[idx]?.alt?.message}
-          >
-            <Input
-              id={`${name}.${idx}.alt`}
-              placeholder={placeholderAlt}
-              {...register(`${name}.${idx}.alt` as const)}
-              aria-invalid={errors?.[idx]?.alt ? 'true' : 'false'}
-            />
-          </Field>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={() => onRemove(idx)}
-            aria-label="Supprimer"
-            className="hover:border-red-400 hover:text-red-500"
-          >
-            <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-          </Button>
-        </div>
-      ))}
-    </div>
   );
 }

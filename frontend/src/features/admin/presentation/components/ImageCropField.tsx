@@ -177,37 +177,39 @@ export default function ImageCropField<T extends FieldValues>({
             className="h-full w-full object-cover"
           />
           <div className="absolute inset-0 hidden items-center justify-center gap-2 bg-black/50 group-hover:flex">
-            <Button
-              type="button"
-              size="xs"
-              onClick={handleRecrop}
-              disabled={disabled || isLoading || !source.field.value}
-              className="bg-white text-[var(--lga-ink)] hover:opacity-85"
-            >
-              <Crop className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Recadrer
-            </Button>
-            <Button
-              type="button"
-              size="xs"
-              onClick={handlePick}
-              disabled={disabled || isLoading}
-              className="bg-white text-[var(--lga-ink)] hover:opacity-85"
-            >
-              <Upload className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Remplacer
-            </Button>
-            <Button
-              type="button"
-              size="xs"
-              variant="secondary"
-              onClick={handleRemove}
-              disabled={disabled || isLoading}
-              className="border-white bg-transparent text-white hover:opacity-85"
-            >
-              <X className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Retirer
-            </Button>
+            <div className="flex flex-col items-center gap-2">
+              <Button
+                type="button"
+                size="xs"
+                onClick={handleRecrop}
+                disabled={disabled || isLoading || !source.field.value}
+                className="bg-white text-[var(--lga-ink)] hover:opacity-85 w-full"
+              >
+                <Crop className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Recadrer
+              </Button>
+              <Button
+                type="button"
+                size="xs"
+                onClick={handlePick}
+                disabled={disabled || isLoading}
+                className="bg-white text-[var(--lga-ink)] hover:opacity-85 w-full"
+              >
+                <Upload className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Remplacer
+              </Button>
+              <Button
+                type="button"
+                size="xs"
+                variant="secondary"
+                onClick={handleRemove}
+                disabled={disabled || isLoading}
+                className="border-white bg-transparent text-white hover:opacity-85 w-full"
+              >
+                <X className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Retirer
+              </Button>
+            </div>
           </div>
         </div>
       ) : (

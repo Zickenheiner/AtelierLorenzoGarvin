@@ -17,7 +17,7 @@ export default function ProjetGallery({ projet }: Props) {
   if (projet.gallery.length === 0) return null;
 
   const images = projet.gallery.map((item) => ({
-    src: toAssetUrl(item.img),
+    src: toAssetUrl(item.imgSource),
     alt: item.alt,
   }));
 

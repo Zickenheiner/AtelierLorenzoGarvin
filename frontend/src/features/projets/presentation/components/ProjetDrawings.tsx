@@ -16,9 +16,9 @@ export default function ProjetDrawings({ projet }: Props) {
 
   if (projet.drawings.length === 0) return null;
 
-  const images = projet.drawings.map((d) => ({
-    src: toAssetUrl(d.img),
-    alt: d.alt,
+  const images = projet.drawings.map((item) => ({
+    src: toAssetUrl(item.imgSource),
+    alt: item.alt,
   }));
 
   return (
@@ -33,9 +33,9 @@ export default function ProjetDrawings({ projet }: Props) {
           </header>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-2">
-            {projet.drawings.map((d, idx) => (
+            {projet.drawings.map((item, idx) => (
               <figure
-                key={`${d.img}-${idx}`}
+                key={`${item.img}-${idx}`}
                 className="flex flex-col gap-3 bg-[var(--lga-surface)] p-6 sm:p-10"
               >
                 <button
@@ -45,11 +45,11 @@ export default function ProjetDrawings({ projet }: Props) {
                     setOpen(true);
                   }}
                   className="cursor-zoom-in"
-                  aria-label={`Agrandir ${d.alt}`}
+                  aria-label={`Agrandir ${item.alt}`}
                 >
                   <img
-                    src={toAssetUrl(d.img)}
-                    alt={d.alt}
+                    src={toAssetUrl(item.img)}
+                    alt={item.alt}
                     loading="lazy"
                     className="aspect-square h-auto w-full object-cover"
                   />
@@ -58,7 +58,7 @@ export default function ProjetDrawings({ projet }: Props) {
                   className="text-[11px] tracking-[0.2em] text-[var(--lga-muted)] uppercase"
                   style={{ fontFamily: 'var(--font-body)', fontWeight: 500 }}
                 >
-                  {d.alt}
+                  {item.alt}
                 </figcaption>
               </figure>
             ))}
