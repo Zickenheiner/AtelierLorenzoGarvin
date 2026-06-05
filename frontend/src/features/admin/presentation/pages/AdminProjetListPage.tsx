@@ -41,7 +41,7 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 import { Eye, LogOut, Pencil, Plus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function AdminProjetListPage() {
@@ -51,6 +51,12 @@ export default function AdminProjetListPage() {
   const { data: projets, isLoading, error } = useProjets();
   const deleteProjet = useDeleteProjet();
   const reorderProjets = useReorderProjets();
+  const [orderedProjets, setOrderedProjets] = useState<ProjetEntity[]>([]);
+
+  useEffect(() => {
+    setOrderedProjets(projets ?? []);
+  }, [projets]);
+
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, {
@@ -60,11 +66,12 @@ export default function AdminProjetListPage() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over || active.id === over.id || !projets) return;
-    const oldIndex = projets.findIndex((p) => p.id === active.id);
-    const newIndex = projets.findIndex((p) => p.id === over.id);
+    if (!over || active.id === over.id) return;
+    const oldIndex = orderedProjets.findIndex((p) => p.id === active.id);
+    const newIndex = orderedProjets.findIndex((p) => p.id === over.id);
     if (oldIndex === -1 || newIndex === -1) return;
-    const next = arrayMove(projets, oldIndex, newIndex);
+    const next = arrayMove(orderedProjets, oldIndex, newIndex);
+    setOrderedProjets(next);
     reorderProjets.mutate(next.map((p) => p.id));
   };
 
@@ -86,6 +93,9 @@ export default function AdminProjetListPage() {
     await logout.mutateAsync();
     navigate(routes.adminLogin, { replace: true });
   };
+
+  const displayedProjets =
+    orderedProjets.length > 0 ? orderedProjets : (projets ?? []);
 
   return (
     <main className="min-h-[100dvh] bg-[var(--lga-surface)] px-6 py-12">
@@ -153,11 +163,11 @@ export default function AdminProjetListPage() {
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={projets.map((p) => p.id)}
+              items={displayedProjets.map((p) => p.id)}
               strategy={rectSortingStrategy}
             >
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {projets.map((projet) => (
+                {displayedProjets.map((projet) => (
                   <SortableProjetCard key={projet.id} id={projet.id}>
                     <Card
                       padding="none"
