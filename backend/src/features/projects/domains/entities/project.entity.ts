@@ -78,6 +78,13 @@ export class ProjectEntity {
   })
   private readonly featured: boolean;
 
+  @ApiProperty({
+    example: 0,
+    description:
+      "Position d'affichage du projet (ordre croissant) dans les listes",
+  })
+  private readonly order: number;
+
   constructor(
     _id: mongoose.Types.ObjectId,
     slug: string,
@@ -89,6 +96,7 @@ export class ProjectEntity {
     drawings: Drawing[],
     gallery: GalleryItem[],
     featured: boolean,
+    order: number,
   ) {
     this.id = _id;
     this.slug = slug;
@@ -100,6 +108,7 @@ export class ProjectEntity {
     this.drawings = drawings;
     this.gallery = gallery;
     this.featured = featured;
+    this.order = order;
   }
 
   // ———————GETTER———————
@@ -146,5 +155,9 @@ export class ProjectEntity {
 
   getFeatured(): boolean {
     return this.featured;
+  }
+
+  getOrder(): number {
+    return this.order;
   }
 }

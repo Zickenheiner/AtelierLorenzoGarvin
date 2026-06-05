@@ -63,4 +63,12 @@ export class ProjetApi {
       method: 'DELETE',
     });
   }
+
+  reorder(ids: string[]): Promise<boolean> {
+    return request<boolean>({
+      url: this.baseUrl.reorder,
+      method: 'PATCH',
+      data: { ids },
+    });
+  }
 }

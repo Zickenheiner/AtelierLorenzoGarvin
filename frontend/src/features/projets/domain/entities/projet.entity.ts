@@ -34,4 +34,5 @@ export interface ProjetEntity {
   drawings: ProjetDrawing[];
   gallery: ProjetGalleryItem[];
   featured: boolean;
+  order: number;
 }

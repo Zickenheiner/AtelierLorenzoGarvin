@@ -15,4 +15,6 @@ export interface IProjectRepository {
   create(payload: CreateProjectPayload): Promise<boolean>;
   update(id: string, payload: UpdateProjectPayload): Promise<boolean>;
   delete(id: string): Promise<boolean>;
+  reorder(ids: string[]): Promise<boolean>;
+  findMaxOrder(): Promise<number>;
 }

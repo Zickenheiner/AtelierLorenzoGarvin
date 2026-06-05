@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { Container } from '@/core/components/ui/container';
 import { Heading } from '@/core/components/ui/heading';
 import { Section } from '@/core/components/ui/section';
 import { toAssetUrl } from '@/core/utils/asset-url';
+import { useState } from 'react';
 import type { ProjetEntity } from '../../domain/entities/projet.entity';
 import Lightbox from './Lightbox';
 
@@ -33,34 +33,23 @@ export default function ProjetDrawings({ projet }: Props) {
           </header>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-2">
-            {projet.drawings.map((item, idx) => (
-              <figure
-                key={`${item.img}-${idx}`}
-                className="flex flex-col gap-3 bg-[var(--lga-surface)] p-6 sm:p-10"
+            {projet.drawings.map((d, idx) => (
+              <button
+                type="button"
+                onClick={() => {
+                  setInitialIndex(idx);
+                  setOpen(true);
+                }}
+                className="cursor-zoom-in"
+                aria-label={`Agrandir ${d.alt}`}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setInitialIndex(idx);
-                    setOpen(true);
-                  }}
-                  className="cursor-zoom-in"
-                  aria-label={`Agrandir ${item.alt}`}
-                >
-                  <img
-                    src={toAssetUrl(item.img)}
-                    alt={item.alt}
-                    loading="lazy"
-                    className="aspect-square h-auto w-full object-cover"
-                  />
-                </button>
-                <figcaption
-                  className="text-[11px] tracking-[0.2em] text-[var(--lga-muted)] uppercase"
-                  style={{ fontFamily: 'var(--font-body)', fontWeight: 500 }}
-                >
-                  {item.alt}
-                </figcaption>
-              </figure>
+                <img
+                  src={toAssetUrl(d.img)}
+                  alt={d.alt}
+                  loading="lazy"
+                  className="h-auto w-full object-contain lg:aspect-[602/590]"
+                />
+              </button>
             ))}
           </div>
         </div>

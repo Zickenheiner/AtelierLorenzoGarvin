@@ -28,6 +28,7 @@ export class ProjetMapper {
         alt: g.alt,
       })),
       featured: dto.featured ?? false,
+      order: dto.order ?? 0,
     };
   }
 }

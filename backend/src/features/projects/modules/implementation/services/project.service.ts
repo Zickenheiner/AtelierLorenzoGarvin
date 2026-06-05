@@ -59,7 +59,10 @@ export class ProjectService implements IProjectService {
       );
     }
 
-    return this.projectRepository.create({ ...dto, title, slug });
+    const maxOrder = await this.projectRepository.findMaxOrder();
+    const order = dto.order ?? maxOrder + 1;
+
+    return this.projectRepository.create({ ...dto, title, slug, order });
   }
 
   async update(id: string, dto: UpdateProjectDto): Promise<boolean> {
@@ -108,5 +111,28 @@ export class ProjectService implements IProjectService {
 
   async delete(id: string): Promise<boolean> {
     return this.projectRepository.delete(id);
+  }
+
+  async reorder(ids: string[]): Promise<boolean> {
+    const projets = await this.projectRepository.findAll();
+    const existingCount = projets ? projets.length : 0;
+
+    if (ids.length !== existingCount) {
+      throw new BadRequestException(
+        'La liste des ids ne correspond pas aux projets existants',
+      );
+    }
+
+    if (new Set(ids).size !== ids.length) {
+      throw new BadRequestException('La liste des ids contient des doublons');
+    }
+
+    const existingIds = new Set(projets!.map((p) => p.getId()));
+    const allKnown = ids.every((id) => existingIds.has(id));
+    if (!allKnown) {
+      throw new BadRequestException('Un ou plusieurs ids sont invalides');
+    }
+
+    return this.projectRepository.reorder(ids);
   }
 }

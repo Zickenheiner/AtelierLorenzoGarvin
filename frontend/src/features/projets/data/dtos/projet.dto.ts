@@ -34,6 +34,7 @@ export interface ProjetResponseDto {
   drawings: ProjetDrawingDto[];
   gallery: ProjetGalleryItemDto[];
   featured: boolean;
+  order: number;
 }
 
 export interface ProjetCreateRequestDto {
@@ -48,3 +49,7 @@ export interface ProjetCreateRequestDto {
 }
 
 export type ProjetUpdateRequestDto = Partial<ProjetCreateRequestDto>;
+
+export interface ProjetReorderRequestDto {
+  ids: string[];
+}
