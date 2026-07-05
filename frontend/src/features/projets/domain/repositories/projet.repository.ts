@@ -11,4 +11,5 @@ export interface ProjetRepository {
   create(data: ProjetCreateRequestDto): Promise<boolean>;
   update(id: string, data: ProjetUpdateRequestDto): Promise<boolean>;
   delete(id: string): Promise<boolean>;
+  reorder(ids: string[]): Promise<boolean>;
 }

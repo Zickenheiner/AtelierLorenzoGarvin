@@ -9,6 +9,7 @@ const endpoints = {
     list: '/projects',
     bySlug: (slug: string) => `/projects/slug/${slug}`,
     byId: (id: string) => `/projects/${id}`,
+    reorder: '/projects/reorder',
   },
   uploads: '/uploads',
 };

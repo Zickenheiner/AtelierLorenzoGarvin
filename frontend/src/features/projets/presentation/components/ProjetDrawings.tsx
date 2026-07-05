@@ -16,9 +16,9 @@ export default function ProjetDrawings({ projet }: Props) {
 
   if (projet.drawings.length === 0) return null;
 
-  const images = projet.drawings.map((d) => ({
-    src: toAssetUrl(d.img),
-    alt: d.alt,
+  const images = projet.drawings.map((item) => ({
+    src: toAssetUrl(item.img),
+    alt: item.alt,
   }));
 
   return (
@@ -33,34 +33,23 @@ export default function ProjetDrawings({ projet }: Props) {
           </header>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-2">
-            {projet.drawings.map((d, idx) => (
-              <figure
-                key={`${d.img}-${idx}`}
-                className="flex flex-col gap-3 bg-[var(--lga-surface)] p-6 sm:p-10"
+            {projet.drawings.map((item, idx) => (
+              <button
+                type="button"
+                onClick={() => {
+                  setInitialIndex(idx);
+                  setOpen(true);
+                }}
+                className="cursor-zoom-in"
+                aria-label={`Agrandir ${item.alt}`}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setInitialIndex(idx);
-                    setOpen(true);
-                  }}
-                  className="cursor-zoom-in"
-                  aria-label={`Agrandir ${d.alt}`}
-                >
-                  <img
-                    src={toAssetUrl(d.img)}
-                    alt={d.alt}
-                    loading="lazy"
-                    className="h-auto w-full object-contain lg:aspect-[602/590]"
-                  />
-                </button>
-                <figcaption
-                  className="text-[11px] tracking-[0.2em] text-[var(--lga-muted)] uppercase"
-                  style={{ fontFamily: 'var(--font-body)', fontWeight: 500 }}
-                >
-                  {d.alt}
-                </figcaption>
-              </figure>
+                <img
+                  src={toAssetUrl(item.img)}
+                  alt={item.alt}
+                  loading="lazy"
+                  className="h-auto w-full object-contain lg:aspect-[602/590]"
+                />
+              </button>
             ))}
           </div>
         </div>

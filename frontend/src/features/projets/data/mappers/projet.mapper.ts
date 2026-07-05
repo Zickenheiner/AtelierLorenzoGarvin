@@ -14,6 +14,7 @@ export class ProjetMapper {
       drawings: dto.drawings.map((d) => ({ img: d.img, alt: d.alt })),
       gallery: dto.gallery.map((g) => ({ img: g.img, alt: g.alt })),
       featured: dto.featured ?? false,
+      order: dto.order ?? 0,
     };
   }
 }

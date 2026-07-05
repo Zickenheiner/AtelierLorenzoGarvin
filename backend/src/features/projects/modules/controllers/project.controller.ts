@@ -1,6 +1,7 @@
 import { Public } from '@core/decorators/public.decorator';
 import {
   CreateProjectDto,
+  ReorderProjectsDto,
   UpdateProjectDto,
 } from '@features/projects/domains/dtos/project.dto';
 import { ProjectEntity } from '@features/projects/domains/entities/project.entity';
@@ -104,6 +105,25 @@ export class ProjectController {
   @Post()
   async create(@Body() dto: CreateProjectDto) {
     return this.projectService.create(dto);
+  }
+
+  @ApiOperation({
+    summary: 'Réordonne les projets',
+    description: 'Définit le nouvel ordre global des projets',
+  })
+  @ApiBody({
+    type: ReorderProjectsDto,
+    description: 'Liste des ids dans le nouvel ordre',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Indique si le réordonnancement a réussi',
+    type: Boolean,
+  })
+  @Patch('reorder')
+  async reorder(@Body() dto: ReorderProjectsDto) {
+    return this.projectService.reorder(dto.ids);
   }
 
   @ApiOperation({

@@ -22,7 +22,10 @@ export class ProjectRepository implements IProjectRepository {
   ) {}
 
   async findAll(): Promise<ProjectEntity[] | null> {
-    const docs = await this.projectModel.find().exec();
+    const docs = await this.projectModel
+      .find()
+      .sort({ order: 1, _id: 1 })
+      .exec();
     return docs ? docs.map((doc) => this.projectMapper.toEntity(doc)) : null;
   }
 
@@ -57,5 +60,25 @@ export class ProjectRepository implements IProjectRepository {
   async delete(id: string): Promise<boolean> {
     const result = await this.projectModel.findByIdAndDelete(id).exec();
     return !!result;
+  }
+
+  async findMaxOrder(): Promise<number> {
+    const doc = await this.projectModel
+      .findOne()
+      .sort({ order: -1 })
+      .select('order')
+      .exec();
+    return doc ? doc.order : -1;
+  }
+
+  async reorder(ids: string[]): Promise<boolean> {
+    const operations = ids.map((id, index) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { $set: { order: index } },
+      },
+    }));
+    const result = await this.projectModel.bulkWrite(operations);
+    return result.modifiedCount > 0 || result.matchedCount === ids.length;
   }
 }
