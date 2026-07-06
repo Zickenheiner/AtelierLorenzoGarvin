@@ -5,6 +5,7 @@ import { useProjet } from '../../domain/hooks/projet.hook';
 import ProjetDrawings from '../components/ProjetDrawings';
 import ProjetGallery from '../components/ProjetGallery';
 import ProjetHero from '../components/ProjetHero';
+import ProjetJsonLd from '../components/ProjetJsonLd';
 import ProjetNarrative from '../components/ProjetNarrative';
 
 export default function ProjetPage() {
@@ -39,6 +40,7 @@ export default function ProjetPage() {
         image={toAssetUrl(projet.hero?.img)}
         type="article"
       />
+      <ProjetJsonLd projet={projet} />
       <ProjetHero projet={projet} />
       <ProjetNarrative projet={projet} />
       <ProjetDrawings projet={projet} />
