@@ -398,8 +398,7 @@ export default function AdminProjetEditPage() {
 type ImageArrayErrors =
   | {
       [idx: number]:
-        | { img?: { message?: string }; alt?: { message?: string } }
-        | undefined;
+        { img?: { message?: string }; alt?: { message?: string } } | undefined;
     }
   | undefined;
 
