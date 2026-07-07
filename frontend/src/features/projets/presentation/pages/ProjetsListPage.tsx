@@ -1,10 +1,10 @@
 import Seo from '@/core/components/Seo';
-import seo from '@/core/constants/seo';
 import { Container } from '@/core/components/ui/container';
 import { ErrorAlert } from '@/core/components/ui/error-alert';
 import { Heading } from '@/core/components/ui/heading';
 import { LoadingState } from '@/core/components/ui/loading-state';
 import routes from '@/core/constants/routes';
+import seo from '@/core/constants/seo';
 import { toAssetUrl } from '@/core/utils/asset-url';
 import { Link } from 'react-router-dom';
 import { useProjets } from '../../domain/hooks/projet.hook';
@@ -51,7 +51,7 @@ export default function ProjetsListPage() {
               {projets.map((projet) => (
                 <Link
                   key={projet.id}
-                  to={routes.projets(projet.slug)}
+                  to={routes.realisations(projet.slug)}
                   className="group relative block aspect-square overflow-hidden bg-[var(--lga-surface)]"
                 >
                   <img

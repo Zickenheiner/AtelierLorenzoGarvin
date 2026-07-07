@@ -1,9 +1,10 @@
 const routes = {
   home: '/',
+  atelier: '/atelier',
   prestations: '/prestations',
   contact: '/contact',
-  projetsList: '/projets',
-  projets: (slug: string) => `/projets/${slug}`,
+  realisationsList: '/realisations',
+  realisations: (slug: string) => `/realisations/${slug}`,
   adminLogin: '/admin/login',
   admin: '/admin',
   adminProjetNew: '/admin/projets/nouveau',

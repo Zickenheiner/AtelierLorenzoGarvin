@@ -74,7 +74,7 @@ export default function SelectionSection() {
                       </p>
                     </div>
                     <Link
-                      to={routes.projets(projet.slug)}
+                      to={routes.realisations(projet.slug)}
                       className="inline-flex items-center gap-2 self-start border-b border-[var(--lga-ink)] pb-1 text-[12px] leading-5 tracking-[0.1em] text-[var(--lga-ink)] uppercase transition-opacity hover:opacity-70 sm:text-[14px]"
                       style={{
                         fontFamily: 'var(--font-body)',

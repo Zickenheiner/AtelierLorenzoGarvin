@@ -1,7 +1,7 @@
 import Seo from '@/core/components/Seo';
 import seo from '@/core/constants/seo';
 import ContexteSection from '../components/ContexteSection';
-import CtaSection from '../components/CtaSection';
+import CtaSection from '../../../../core/components/CtaSection';
 import ServiceSection from '../components/ServiceSection';
 
 const SERVICE_01 = `La genèse de chaque projet repose sur une lecture attentive du lieu, de la lumière et des usages. L’architecture que l’atelier développe devient plus qu’une simple construction : elle se transforme en une expérience sensible et pensée dans les moindres détails.

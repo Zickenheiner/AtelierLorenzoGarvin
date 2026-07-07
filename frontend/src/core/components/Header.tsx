@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 
 const NAV_LINKS = [
   { label: 'Accueil', href: routes.home },
-  { label: 'Projets', href: routes.projetsList },
+  { label: 'Projets', href: routes.realisationsList },
   { label: 'Prestations', href: routes.prestations },
   { label: 'Contact', href: routes.contact },
 ];

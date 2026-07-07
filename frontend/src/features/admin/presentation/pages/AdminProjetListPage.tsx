@@ -210,7 +210,7 @@ export default function AdminProjetListPage() {
                             title="Voir la page publique"
                           >
                             <Link
-                              to={routes.projets(projet.slug)}
+                              to={routes.realisations(projet.slug)}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
