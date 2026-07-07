@@ -33,14 +33,17 @@ export default function Header() {
       <header className="fixed top-0 right-0 left-0 z-50 w-full bg-[var(--lga-bg)]">
         <div className="mx-auto flex items-center justify-between border-b border-gray-200 px-2 sm:px-4 md:px-8 py-2">
           <div className="flex items-center gap-4 max-md:justify-between w-full">
-            <img
-              src="https://www.lorenzogarvin.eu/assets/lgalogo100x100.png"
-              alt="LGA"
-              width={50}
-              height={50}
-              loading="eager"
-              className="h-[50px] w-[50px] object-contain"
-            />
+            <a href={routes.home}>
+              <img
+                src="https://www.lorenzogarvin.eu/assets/lgalogo100x100.png"
+                alt="LGA"
+                width={50}
+                height={50}
+                loading="eager"
+                className="h-[50px] w-[50px] object-contain"
+                onClick={() => (window.location.href = routes.home)}
+              />
+            </a>
             <span
               className="text-[18px] leading-[25px] font-bold tracking-[-0.06em] text-[var(--lga-ink)]"
               style={{ fontFamily: 'var(--font-body)' }}
@@ -64,9 +67,12 @@ export default function Header() {
           </div>
 
           <nav className="hidden md:block">
-            <ul className="flex items-center gap-12">
-              {NAV_LINKS.map((link) => (
-                <li key={link.label}>
+            <ul className="flex items-center gap-6">
+              {NAV_LINKS.map((link, index) => (
+                <li key={link.label} className="flex items-center gap-6">
+                  {index > 0 && (
+                    <span aria-hidden="true" className="h-4 w-px bg-gray-300" />
+                  )}
                   <a
                     href={link.href}
                     className={cn(
