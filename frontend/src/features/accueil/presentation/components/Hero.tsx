@@ -17,18 +17,10 @@ export default function Hero() {
 
       <div className="relative z-10 mx-auto flex h-full max-w-[1280px] flex-col items-end justify-end px-8 py-24">
         <div className="flex flex-col items-center pb-4 text-center text-[var(--lga-hero-text)]">
-          <h1
-            className="block uppercase tracking-[-0.064em]"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 400,
-              fontSize: '70px',
-              lineHeight: '67px',
-            }}
-          >
-            Lorenzo
+          <h1 className="font-display block text-[50px] leading-[67px] font-normal tracking-[-0.064em] text-end">
+            architecture durable
             <br />
-            Garvin
+            et rénovation écologique
           </h1>
         </div>
       </div>

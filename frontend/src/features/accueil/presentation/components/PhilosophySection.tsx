@@ -1,47 +1,51 @@
-type Block = {
-  eyebrow: string;
-  body: string;
-};
+const INTRO = `L’atelier accompagne particuliers et professionnels dans leurs projets de rénovation, réhabilitation, extension et construction neuve. Notre approche associe qualité architecturale, rigueur, performance environnementale et attention portée aux usages pour concevoir des espaces durables, confortables et adaptés à chaque mode de vie et besoins.`;
 
-const BLOCKS: Block[] = [
-  {
-    eyebrow: 'Construire durablement',
-    body: `L’atelier s’attache à concevoir des propositions adaptées pour chaque projet en se souciant de l’espace habitable, l’environnement, les matières et les détails de mise en œuvre qui le compose.\n\nLa philosophie de l’atelier place l’usager au cœur de la conception, en privilégiant l’écoute, le dialogue et une collaboration étroite mettant à sa disposition notre expérience, notre savoir-faire et notre engagement pour la réussite du projet.\n\nSpécialisés en rénovation de haute précision technique avec des matériaux biosourcés utilisés avec rigueur, nous accompagnons les particuliers dans les rénovations énergétiques de logements anciens et les réhabilitation de maisons rurales en faisant des enjeux écologiques une opportunité de concevoir des architectures qui fonctionnent techniquement sur le long terme, confortables et harmonieuses.\n\nDe l’accompagnement de l’ébauche du projet jusqu’à sa réalisation finale, l’atelier met en avant la recherche pertinente du résultat optimal avec rigueur et sensibilité.`,
-  },
-  {
-    eyebrow: 'De la conception à la réalisation',
-    body: `Nous intervenons sur plusieurs échelles et à toutes les étapes : Études et conception architecturale; Réhabilitations; Extensions; Surélévations; Aménagement des espaces intérieurs; Choix des matériaux biosourcés adaptés; Optimisation énergétique et bioclimatique; Suivi de chantier et mise en œuvre écologique.\n\nDe l’accompagnement de l’ébauche du projet jusqu’à sa réalisation finale, l’atelier met en avant la recherche pertinente du résultat optimal avec rigueur et sensibilité. Notre approche globale garantit la cohérence entre esthétique, confort et performance environnementale.`,
-  },
-  {
-    eyebrow: 'Construire pour demain',
-    body: `Opter pour une construction écologique, c’est investir dans un habitat durable, économe en énergie et respectueux de votre santé. C’est aussi faire le choix d’une architecture qui s’inscrit dans son territoire et valorise les ressources locales.`,
-  },
-  {
-    eyebrow: 'Donnez vie à votre projet',
-    body: `Que ce soit pour une maison individuelle, un bâtiment professionnel ou une rénovation, nous vous accompagnons pour créer des espaces durables, harmonieux et porteurs de sens.`,
-  },
+const APPROCHE = `Nous plaçons l’usager au cœur de chaque projet à travers une démarche fondée sur l’écoute, le dialogue et la recherche de solutions adaptées. Spécialisés dans la rénovation énergétique de logements anciens, réhabilitation de maisons rurales et l’utilisation de matériaux biosourcés. Les enjeux écologiques comme opportunité, pas comme contrainte. Nous concevons des architectures sobres, pérennes et respectueuses de leur environnement sur le long terme.`;
+
+const DOMAINES = [
+  'Études de faisabilité et conseil',
+  'Conception architecturale',
+  'Rénovation et réhabilitation',
+  'Extensions et surélévations',
+  'Architecture intérieure',
+  'Architecture commerciale',
+  'Démarches administratives',
+  'Maitrise d’œuvre et suivi de chantier',
 ];
 
 export default function PhilosophySection() {
   return (
-    <section id="prestations" className="w-full bg-[var(--lga-bg)] px-8 py-24">
-      <div className="lg:pl-40 mx-auto flex max-w-[1216px] flex-col gap-8">
-        {BLOCKS.map((block) => (
-          <article key={block.eyebrow} className="flex flex-col gap-4">
-            <h3
-              className="text-right text-[18px] leading-[16.5px] tracking-[0.06em] text-[var(--lga-muted)]"
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 900 }}
-            >
-              {block.eyebrow}
-            </h3>
-            <div
-              className="text-justify text-[20px] leading-[1.85] whitespace-pre-line text-[var(--lga-ink)]"
-              style={{ fontFamily: 'var(--font-display)', fontWeight: 400 }}
-            >
-              {block.body}
-            </div>
-          </article>
-        ))}
+    <section
+      id="prestations"
+      className="w-full bg-[var(--lga-bg)] px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
+    >
+      <div className="mx-auto max-w-[1216px]">
+        <div className="ml-auto flex max-w-[904px] flex-col text-right lg:mr-[104px]">
+          <p className="font-display text-[16px] leading-[22px] font-normal text-[var(--lga-ink)] sm:text-[18px] sm:leading-[24px]">
+            {INTRO}
+          </p>
+
+          <h3 className="font-display mt-[50px] text-[16px] leading-[16.5px] font-black tracking-[0.0556em] text-[var(--lga-muted)] sm:text-[18px]">
+            Concevoir avec sens
+          </h3>
+          <p className="font-display mt-[10px] text-[16px] leading-[22px] font-normal text-[var(--lga-ink)] sm:text-[18px] sm:leading-[24px]">
+            {APPROCHE}
+          </p>
+
+          <h3 className="font-display mt-[50px] text-[16px] leading-[16.5px] font-black tracking-[0.0556em] text-[var(--lga-muted)] sm:text-[18px]">
+            Domaines d’intervention
+          </h3>
+          <ul className="mt-[10px] flex flex-col gap-[10px]">
+            {DOMAINES.map((domaine) => (
+              <li
+                key={domaine}
+                className="font-display text-[16px] leading-[16.5px] font-medium tracking-[0.0611em] text-[var(--lga-muted)] underline underline-offset-4 sm:text-[18px]"
+              >
+                {domaine}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );
