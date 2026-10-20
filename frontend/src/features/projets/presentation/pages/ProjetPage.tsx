@@ -7,6 +7,7 @@ import ProjetGallery from '../components/ProjetGallery';
 import ProjetHero from '../components/ProjetHero';
 import ProjetJsonLd from '../components/ProjetJsonLd';
 import ProjetNarrative from '../components/ProjetNarrative';
+import ProjetNavigation from '../components/ProjetNavigation';
 
 export default function ProjetPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -45,6 +46,7 @@ export default function ProjetPage() {
       <ProjetNarrative projet={projet} />
       <ProjetDrawings projet={projet} />
       <ProjetGallery projet={projet} />
+      <ProjetNavigation projet={projet} />
     </div>
   );
 }
