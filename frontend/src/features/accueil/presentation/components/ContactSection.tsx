@@ -4,7 +4,7 @@ export default function ContactSection() {
       <div className="mx-auto flex max-w-[1216px] flex-col items-center gap-12">
         <div className="flex flex-col items-center text-center">
           <img
-            src="https://www.lorenzogarvin.eu/assets/lgalogo.png"
+            src="/images/logoLGA2.png"
             alt="LGA — Lorenzo Garvin"
             loading="lazy"
             className="my-2 h-70 w-auto object-contain"
