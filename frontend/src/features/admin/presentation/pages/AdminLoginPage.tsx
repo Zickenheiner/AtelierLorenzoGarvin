@@ -53,7 +53,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-[420px]">
         <header className="mb-10 flex flex-col items-center gap-4">
           <img
-            src="https://www.lorenzogarvin.eu/assets/lgalogo100x100.png"
+            src="/images/logoLGA.png"
             alt="LGA"
             className="h-[60px] w-[60px] object-contain"
           />
